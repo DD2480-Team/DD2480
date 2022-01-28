@@ -1,4 +1,10 @@
 import numpy as np
+"""
+Returns True if there exists at least one set of N PTS consecutive data points such that at least one of the
+points lies a distance greater than DIST from the line joining the first and last of these N PTS
+points. If first and last points are the same and distance from intermediate point to first/last point
+exceeds dist, return True
+"""
 def cmv_condition_6(points, N_PTS, dist):
     def distance_between_points(p1, p2):
         return ((p2[0] - p1[0]) ** 2 + (p2[1] - p1[1]) ** 2) ** 0.5
