@@ -24,3 +24,20 @@ def check_condition_0(point_array, length1):
         if(math.sqrt(xdist**2 + ydist**2 ) > length1):
             return True
     return False
+
+def check_condition_5(point_array):
+    """ Checks if there are two consecutive x-coords such that
+        the first subtracted from the second is less than 0
+
+    Args:
+        point_array (type: list of 2-tuples): contains (x,y) values
+
+    Returns:
+        (type: boolean) True if condition met, false otherwise
+    """
+    if(len(point_array) < 2):
+        return False
+    for i in range(len(point_array) -1):
+        if(point_array[i+1][0] - point_array[i][0] < 0 ):
+            return True
+    return False
