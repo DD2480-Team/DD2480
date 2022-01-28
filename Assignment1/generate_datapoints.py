@@ -28,6 +28,10 @@ import pickle
 
 
 def generate_datatpoints(x):
+    """Generating vectors with (x,y)
+    Args:
+        x(int): , number of points
+    """
     datapoints = [(round(random.uniform(-10, 10), 3), round(random.uniform(-10, 10), 3))
                   for i in range(x)]
     data_file = open('./datapoints.dat', 'wb')
@@ -36,6 +40,8 @@ def generate_datatpoints(x):
 
 
 def generate_LCM_matrix():
+    """Generating 15x15 matrix with values "ANDD", "ORR", "NOTUSED"
+    """
     vals = ["ANDD", "ORR", "NOTUSED"]
     lcm = [["" for _ in range(15)] for _ in range(15)]
     for i in range(15):
@@ -48,19 +54,21 @@ def generate_LCM_matrix():
     data_file.close()
     # print(lcm)
 
-# T/F vector
-
 
 def generate_puv():
+    """Generating T/F vector
+    """
     puv = [random.randint(0, 1) for _ in range(15)]
     data_file = open('./datapoints.dat', 'wb')
     pickle.dump(puv, data_file)
-    # data_file.close()
+    data_file.close()
 
-    # x = number of points
+
+""" Unquote to generate the needed files """
+# x = number of points
 # generate_datatpoints(x=10)
 # generate_LCM_matrix()
-generate_puv()
+# generate_puv()
 data_file = open("./datapoints.dat", "rb")
 list_points = pickle.load(data_file)
 print(list_points)
