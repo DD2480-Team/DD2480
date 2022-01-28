@@ -1,3 +1,7 @@
+"""
+Returns true if there exists at least one set of three consecutive data points that cannot all be contained
+within or on a circle of given radius.
+"""
 def cmv_condition_1(points, radius):
     if len(points) < 3:
         return False
