@@ -31,8 +31,8 @@ def test3_check_condition_0():
 #must exist one set of two consecutive data points that are further than length1
 #pass negative distance, should return False
 def test4_check_condition_0():
-    points = [(0,0)]  #dist undefined
-    length1 = 0
+    points = [(0,0),(4,3)]  #dist is 5
+    length1 = -1
     assert(check_condition_0(points, length1) == False)
     print("Success: test4_check_condition_0")
 
