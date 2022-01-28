@@ -53,9 +53,3 @@ def cmv_condition_8(points, a_pts, b_pts, radius1):
             return True
     # Both conditions failed
     return False
-
-
-points = [(1, 0), (3, 0), (5, 0), (-1, -2), (2, 1),
-          (2, 2), (3, 3), (-2, -2), (1, 1), (-1, -1)]
-r = cmv_condition_8(points, 2, 2, 1.5)
-print(r)
