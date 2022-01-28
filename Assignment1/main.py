@@ -1,3 +1,7 @@
+"""
+Return True when there exists at least one set of two data points, (X[i],Y[i]) and (X[j],Y[j]), separated by
+exactly G PTS consecutive intervening points, such that X[j] - X[i] < 0. (where i < j )
+"""
 def cmv_condition_11(points, G_PTS):
     if G_PTS > len(points) - 2 or len(points) < 3:
         return False
