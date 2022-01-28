@@ -14,13 +14,13 @@ class CMVCondition2TestCase(unittest.TestCase):
         epsilon = math.pi
         self.assertFalse(cmv_condition_2(points, epsilon))
     
-    #test points form 90 degree angle (pi/4), which falls outside the excluded range (3pi/4, 5pi/4)
+    #test points form pi/2 rad angle, which falls outside the excluded range [3pi/4, 5pi/4]
     def test_reasonable_epsilon(self):
         points = [(1,0), (0,0), (0,1)]
         epsilon = math.pi/4
         self.assertTrue(cmv_condition_2(points, epsilon))
     
-     #test points form 90 degree angles (pi/4), which fall inside the excluded range (pi/2, 3pi/2)
+     #test points form pi/2 rad angles, which fall inside the excluded range [pi/2, 3pi/2]
     def test_reasonable_epsilon_2(self):
         points = [(1,0), (0,0), (0,1), (-1,1)]
         epsilon = math.pi/2
