@@ -25,7 +25,6 @@ def cmv_condition_6(points, N_PTS, dist):
             for midIdx in range(beginIdx + 1, endIdx):
                 midPoint = np.asarray(points[midIdx])
                 distance_from_line = np.abs(np.cross(beginPoint - endPoint, endPoint - midPoint)) / np.linalg.norm(beginPoint - endPoint)
-                print(beginPoint, endPoint, midPoint, distance_from_line)
                 if distance_from_line > dist:
                     return True
     return False
