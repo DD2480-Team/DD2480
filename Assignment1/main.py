@@ -3,8 +3,19 @@ import math
 def main():
     return
 
-#returns True if there are two points p1, p2, in the array seperated by K_PTS conscutive
-#intervening points, and the distance between p1 and p2 is greater than length1
+
+    """
+    returns True if there are two points p1, p2, in the array seperated by K_PTS conscutive 
+    intervening points, and the distance between p1 and p2 is greater than length1
+    
+    Args: 
+        points (type: list of 2-tuples): contains (x,y) values
+        K_PTS (type: int): number of intervening points
+        length1 (type: float): minimum distance necessary
+
+    Returns: 
+        (type: boolean) True if condition met, False, otherwise
+    """
 def cmv_condition_7(points, K_PTS, length1):
 
     #TODO refactor, and make utility functions global
@@ -13,8 +24,7 @@ def cmv_condition_7(points, K_PTS, length1):
 
     if len(points) < 3: 
         return False
-
-    #check distances of values that are separted K_PTS points in the points list
+        
     for i in range(len(points) - K_PTS - 1):
         p1 = points[i]
         p2 = points[i + K_PTS + 1]
