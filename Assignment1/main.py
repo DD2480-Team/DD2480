@@ -47,6 +47,44 @@ def cmv_condition_1(points, radius):
             return True
     return False
 
+
+def cmv_condition_2(points, epsilon):
+
+    """ There exists at least one set of three consecutive data 
+        points that form an angle greater than pi + epsilon or less tha npi - epsilon
+
+    Args:
+        points (list): coordinates
+        epsilon (float): angle
+
+    Returns:
+        True if condition is satisfied, false otherwise
+    """
+
+    #returns the Euclidean distance between two points 
+    def dist(p1, p2):
+        return math.sqrt((p1[0] - p2[0])**2 + (p1[1] - p2[1])**2)
+
+    #returns the angle formed by the line segments p1 -> p2 -> p3
+    def get_angle(p1, p2, p3): #p1, p2, p3 are points 
+        v12 = dist(p1,p2)
+        v23 = dist(p2,p3)
+        v31 = dist(p3,p1)
+        return math.acos((v12 ** 2 + v23 ** 2 - v31 ** 2) / (2 * v12 * v23))
+
+    for i in range(len(points) - 2):
+        p1 = points[i]
+        p2 = points[i+1]
+        p3 = points[i+2]
+
+        if p1 == p2 or p2 == p3:
+            continue
+
+        angle = get_angle(p1, p2, p3)
+        if angle < math.pi - epsilon or angle > math.pi + epsilon:
+            return True
+    return False
+
 def cmv_condition_3(points, area1):
     """ There exists at least one set of three consecutive data 
         points that are the vertices of a triangle
@@ -87,6 +125,7 @@ def check_condition_5(point_array):
         if(point_array[i+1][0] - point_array[i][0] < 0 ):
             return True
     return False
+
 
 if __name__ == "__main__":
     pass
