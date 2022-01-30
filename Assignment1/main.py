@@ -25,8 +25,6 @@ def check_condition_0(point_array, length1):
             return True
     return False
 
-
-#TODO: skriv test till denna!
 def check_condition_10(point_array, e_pts, f_pts, area1, num_points):
     """Checks if there is a set of three data points, separated by
         e_pts and f_pts respectively, that form a triangle with an
@@ -46,16 +44,20 @@ def check_condition_10(point_array, e_pts, f_pts, area1, num_points):
     input_con2 = e_pts >= 1 and f_pts >= 1
     input_con3 = e_pts + f_pts <= num_points - 3
     if(not(input_con1 and input_con2 and input_con3)):
+        print("incorrect input")
         return False
 
     for i in range(len(point_array)):
+        if(i + e_pts + 1 + f_pts + 1 >= num_points): #looped as far as possible
+            break
         vertex1 = point_array[i]
         vertex2 = point_array[i + e_pts + 1]
         vertex3 = point_array[i + e_pts + 1 + f_pts + 1]
         #use triangle coord formula
-        area = (vertex1[0] * (vertex2[1] - vertex3[1])
-            +   vertex2[0] * (vertex3[1] - vertex1[1])
-            +   vertex3[0] * (vertex1[1] - vertex2[1]) ) /2
+        area = abs((vertex1[0] * (vertex2[1] - vertex3[1])
+                +   vertex2[0] * (vertex3[1] - vertex1[1])
+                +   vertex3[0] * (vertex1[1] - vertex2[1]) ) /2)
+        # print(area)
         if (area > area1):
             return True
     return False
