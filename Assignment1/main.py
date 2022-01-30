@@ -43,8 +43,6 @@ def cmv_condition_8(points, a_pts, b_pts, radius1, numpoints):
         x3, y3 = p3[0], p3[1]
         # Same as calculations as cmv_1
         center = [(x1 + x2 + x3) / 3, (y1 + y2 + y3) / 3]
-        print(a_pts, b_pts, "\n")
-        print(p1, p2, p3, "\n \n ")
         def distance_exceeds_radius(x, y):
             squared_distance = (x - center[0]) ** 2 + \
                 (y - center[1]) ** 2
