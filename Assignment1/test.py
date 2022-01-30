@@ -195,5 +195,34 @@ class CMVCondition11TestCase(unittest.TestCase):
         points = [(1, 2), (4, 2), (3, 1), (-1, 2)] 
         self.assertTrue(cmv_condition_11(points, G_PTS=1))
 
+class CMVCondition12TestCase(unittest.TestCase):
+
+    def test_simple_true_case(self):
+        points = [(0,0), (0,0), (0,0), (0,0), (10,0)]
+        K_PTS = 3
+        length1, length2 = 9.0, 11.01
+        self.assertTrue(cmv_condition_12(points, K_PTS, length1, length2))
+    
+    #testing smallest case with three points 
+    def test_only_three_points(self):
+        points = [(0,0), (0,0), (11,0)]
+        K_PTS = 1
+        length1, length2 = 10.0, 12.0
+        self.assertTrue(cmv_condition_12(points, K_PTS, length1, length2))
+
+    #false if the distance between points is not less than length2
+    def test_equal_to_length(self):
+        points = [(0,0), (0,0), (0,0), (0,0), (10,0)]
+        K_PTS = 3
+        length1, length2 = 9, 10
+        self.assertFalse(cmv_condition_12(points, K_PTS, length1, length2))
+    
+    #false if the points aren't K_PTS apart in the array
+    def test_not_K_PTS_away(self):
+        points = [(0,0), (0,0), (0,0), (90,0), (100,0)]
+        K_PTS = 3
+        length1, length2 = 99.9, 80
+        self.assertFalse(cmv_condition_12(points, K_PTS, length1, length2))
+
 if __name__ == "__main__":
     unittest.main()
