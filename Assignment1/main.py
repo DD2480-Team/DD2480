@@ -88,5 +88,33 @@ def check_condition_5(point_array):
             return True
     return False
 
+def check_condition_14(point_array, E_PTS, F_PTS, area1, area2):
+    """ Check if:
+        (1) there exists at least one set of three data points, separated by exactly 
+            E PTS and F PTS consecutive intervening points, respectively, that are 
+            the vertices of a triangle with area greater than AREA1. 
+        (2) there exist three data points separated by exactly E PTS and F PTS consecutive
+            intervening points, respectively, that are the vertices of a triangle with area
+            less than AREA2. 
+    """
+
+    def get_area(p1, p2, p3):
+        return 0.5*(p1[0]*(p2[1] - p3[1]) + p2[0]*(p3[1] - p1[1]) + p3[0]*(p1[1] - p2[1]))
+
+    if len(point_array) < 5 or len(point_array) < E_PTS + F_PTS + 3 or area1 <= 0 or area2 <= 0:
+        return False
+
+    conditions = [False, False]
+
+    for i in range(len(point_array) - E_PTS - 1 - F_PTS - 1):
+        area = get_area(point_array[i], point_array[i + E_PTS + 1], point_array[i + E_PTS + 1 + F_PTS + 1])
+        if area >= area1:
+            conditions[0] = True
+        if area <= area2:
+            conditions[1] = True
+        if conditions[0] and conditions[1]:
+            return True
+    return False
+
 if __name__ == "__main__":
     pass

@@ -100,6 +100,35 @@ class CMVCondition5TestCase(unittest.TestCase):
         points = [(0,0)]  #dist undefined
         self.assertFalse(check_condition_5(points))
 
+class CMVCondition14TestCase(unittest.TestCase):
+    def test_area_fullfill_condition(self):
+
+        # areas bigger than area1 and smaller than area2
+
+        points = [(2, 4), (1, -6), (5, 8), (0, 0), (2, 9), (-1, 0)]
+        self.assertTrue(check_condition_14(points, 1, 1, 5, 7))
+
+    def test_area_smaller_than_area1(self):
+        
+        # area bigger than area1 not exists
+
+        points = [(2, 4), (1, -6), (3, 1), (0, 0), (2, 9), (-1, 0)]
+        self.assertFalse(check_condition_14(points, 1, 1, 5, 10))
+
+    def test_area_bigger_than_area2(self):
+        
+        # area smaller than area2 not exists
+
+        points = [(2, 4), (1, -6), (10, 8), (0, 0), (2, 9), (-10, 0)]
+        self.assertFalse(check_condition_14(points, 1, 1, 5, 10))
+
+    def test_area1_or_area2_invalid(self):
+        
+        # area1 and area2 should not be 0 or negative
+        
+        points = [(2, 4), (1, 1), (1, -6), (5, 8), (2, 2)]
+        self.assertFalse(check_condition_14(points, 1, 1, 0, 5))
+        self.assertFalse(check_condition_14(points, 1, 1, 5, -1))
 
 if __name__ == '__main__':
     unittest.main()
