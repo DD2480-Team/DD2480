@@ -71,6 +71,36 @@ def cmv_condition_3(points, area1):
             return True
     return False
 
+def check_condition_4(point_array, Q_PTS, quad):
+    """ Checks if There exists at least one set of Q PTS consecutive data points that lie in more than QUADS 
+        quadrants.
+    """
+
+    def number_of_quad(points):
+        
+        in_quads = [0, 0, 0, 0]
+        
+        for pt in points:
+            if pt[0] >= 0 and pt[1] >= 0:
+                in_quads[0] = 1
+            elif pt[0] < 0 and pt[1] >= 0:
+                in_quads[1] = 1
+            elif pt[0] <= 0 and pt[1] < 0:
+                in_quads[2] = 1
+            elif pt[0] > 0 and pt[1] < 0:
+                in_quads[3] = 1
+        
+        return sum(in_quads)
+
+
+    if (len(point_array) < Q_PTS) :
+        return False
+    for i in range(len(point_array) - Q_PTS + 1):
+        if number_of_quad(point_array[i: i + Q_PTS]) >= quad:
+            return True 
+
+    return False
+
 def check_condition_5(point_array):
     """ Checks if there are two consecutive x-coords such that
         the first subtracted from the second is less than 0

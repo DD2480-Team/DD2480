@@ -76,6 +76,21 @@ class CMVCondition3TestCase(unittest.TestCase):
         points = [(2, 4), (1, -6), (5, 8)]
         self.assertFalse(cmv_condition_3(points, 0))
 
+class CMVCondition4TestCase(unittest.TestCase):
+    # points lie in more than QUADS quadrants.
+    def test_more_than_quad(self):
+        points = [(0,0),(4,3),(-1,-1),(2,-3)]  
+        self.assertTrue(check_condition_4(points, 3, 3))
+    
+    # points lie in less than QUADS quadrants.
+    def test_less_than_quad(self):
+        points = [(0,0),(-2,3),(6,3),(2,3)]  
+        self.assertFalse(check_condition_4(points, 2, 3))
+
+    # points lie on axis.
+    def test_on_axis(self):
+        points = [(1,0),(0,-1),(-1,0)]  
+        self.assertTrue(check_condition_4(points, 3, 3))
 
 """ Must exist at least one set of consecutive data points
     where x-coord of first is larger than x-coord of latter """
