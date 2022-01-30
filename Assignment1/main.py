@@ -1,7 +1,6 @@
 import math
 import numpy as np
 
-
 def check_condition_0(point_array, length1):
     """ 
     Checks if there is a set of consecutive data points
@@ -170,7 +169,7 @@ def cmv_condition_6(points, N_PTS, dist):
 
 def cmv_condition_7(points, K_PTS, length1):
     """
-    returns True if there are two points p1, p2, in the array seperated by K_PTS conscutive 
+    Checks if there are two points p1, p2, in the array seperated by K_PTS conscutive 
     intervening points, and the distance between p1 and p2 is greater than length1
     
     Args: 
@@ -191,6 +190,28 @@ def cmv_condition_7(points, K_PTS, length1):
         p1 = points[i]
         p2 = points[i + K_PTS + 1]
         if dist(p1, p2) > length1:
+            return True
+    return False
+
+
+def cmv_condition_11(points, G_PTS):
+    """
+    Checks if there exists at least one set of two data points, (X[i],Y[i]) and (X[j],Y[j]), separated by
+    exactly G PTS consecutive intervening points, such that X[j] - X[i] < 0. (where i < j )
+    
+    Args: 
+        points (type: list of 2-tuples): contains (x,y) values
+        G_PTS (type: int): number of intervening points
+
+    Returns: 
+        (type: boolean) True if condition met, False, otherwise
+    """
+    if G_PTS > len(points) - 2 or len(points) < 3:
+        return False
+    for beginIdx in range(len(points) - G_PTS - 1):
+        endIdx = beginIdx + G_PTS + 1
+        x_begin, x_end = points[beginIdx][0], points[endIdx][0]
+        if x_end - x_begin < 0:
             return True
     return False
     
