@@ -327,6 +327,59 @@ def cmv_condition_12(points, K_PTS, length1, length2):
         if dist(p1, p2) < length2:
             return True and cmv_condition_7(points, K_PTS, length1)
     return False
+  
+def cmv_condition_13(points, a_pts, b_pts, radius1, radius2, numpoints):
+    """
+    There exists at least one set of three data points, separated by exactly A PTS and B PTS 
+    consecutive intervening points, respectively, that cannot be contained within or on a 
+    circle of radius RADIUS1. In addition, there exists at least one set of three data points 
+    (which can be the same or different from the three data points just mentioned) 
+    separated by exactly A PTS and B PTS consecutive intervening points, respectively, 
+    that can be contained in or on a circle of radius RADIUS2. 
+    Both parts must be true for the LIC to be true. 
+    The condition is not met when NUMPOINTS < 5.
+
+
+    Args:
+        points (list): list of (x,y) coordinates
+        a_pts (int): number of intervening points
+        b_pts (int): number of intervening points
+        radius1 (float): circle radius
+        radius2 (float): circle radius, must be 0 ≤ RADIUS2
+
+    Returns:
+        True if conditions are met
+    """
+    if numpoints < 5:
+        return False
+    if radius2 <= 0:
+        return False
+
+    for i in range(numpoints - a_pts - b_pts - 2):
+        p1 = points[i]
+        p2 = points[i+a_pts+1]
+        p3 = points[i+a_pts+b_pts+2]
+
+        x1, y1 = p1[0], p1[1]
+        x2, y2 = p2[0], p2[1]
+        x3, y3 = p3[0], p3[1]
+
+        # Same as calculations as cmv_1
+        center = [(x1 + x2 + x3) / 3, (y1 + y2 + y3) / 3]
+
+        def distance_exceeds_radius(x, y, radius):
+            squared_distance = (x - center[0]) ** 2 + \
+                (y - center[1]) ** 2
+
+            if squared_distance > radius ** 2:
+                # True if the point cannot be contained
+                return True
+            return False
+
+        if (not distance_exceeds_radius(x1, y1, radius2) and not distance_exceeds_radius(x2, y2, radius2) and not distance_exceeds_radius(x3, y3, radius2)):
+            return cmv_condition_8(points, a_pts, b_pts, radius1, numpoints)
+        
+    return False
     
 if __name__ == "__main__":
     pass
