@@ -100,6 +100,28 @@ class CMVCondition5TestCase(unittest.TestCase):
         points = [(0,0)]  #dist undefined
         self.assertFalse(check_condition_5(points))
 
+class CMVCondition9TestCase(unittest.TestCase):
+
+    # angle falls outside the excluded range
+    def test_outside_angle(self):
+        points = [(3, 0) , (2, -1), (0, 0), (-1, -1), (3, -8), (0, 7), (20, 0)]
+        self.assertTrue(check_condition_9(points, 1, 2, (math.pi * 3)/4))
+
+    # angle falls inside the excluded range
+    def test_inside_angle(self):
+        points = [(3, 0) , (2, -1), (0, 0), (-1, -1), (3, -8), (0, 7), (-2, 0)]
+        self.assertFalse(check_condition_9(points, 1, 2, (math.pi * 3)/4))
+
+    # points have coincidence
+    def test_points_coincidence(self):
+        points = [(0, 0), (-3, 9), (0, 2), (-3, 9), (0, 2), (-1, -2)]
+        self.assertFalse(check_condition_9(points, 1, 1, math.pi/2))
+
+    # points are not enough to be seperate by C_PTS points and D_PTS points
+    def test_points_not_enough(self):
+        points = [(0, 0), (0, 2), (3, 1), (4, 5)]
+        self.assertFalse(check_condition_9(points, 1, 1, math.pi/2))
+        
 
 if __name__ == '__main__':
     unittest.main()
