@@ -1,30 +1,7 @@
-# int numpoints
-# list points
-# double length1
-# double radius1
-# double epsilon
-# double area1
-# int Q_PTS
-# int quads
-# double dist
-# int N_PTS
-# int K_PTS
-# int A_PTS
-# int B_PTS
-# int C_PTS
-# int D_PTS
-# int E_PTS
-# int F_PTS
-# int G_PTS
-# double length2
-# double radius2
-# double area2
-# list LCM
-# list PUV
-
-
+from argparse import ArgumentError
 import random
 import pickle
+from turtle import pu
 
 
 def generate_datatpoints(x):
@@ -32,43 +9,48 @@ def generate_datatpoints(x):
     Args:
         x(int): , number of points
     """
-    datapoints = [(round(random.uniform(-10, 10), 3), round(random.uniform(-10, 10), 3))
-                  for i in range(x)]
-    data_file = open('./datapoints.dat', 'wb')
-    pickle.dump(datapoints, data_file)
-    data_file.close()
+    return [(round(random.uniform(-10, 10), 3), round(random.uniform(-10, 10), 3))
+                  for _ in range(x)]
 
 
-def generate_LCM_matrix():
+def generate_LCM_matrix(vals):
     """Generating 15x15 matrix with values "ANDD", "ORR", "NOTUSED"
     """
-    vals = ["ANDD", "ORR", "NOTUSED"]
+    vals = ["ANDD", "ORR", "NOTUSED"] if not vals else vals
+    for v in vals:
+        if v not in ("ANDD", "ORR", "NOTUSED"):
+            raise ArgumentError("provide a value of ANDD, ORR, NOTUSED for the lcm matrix")
     lcm = [["" for _ in range(15)] for _ in range(15)]
     for i in range(15):
         for j in range(15):
             choice = random.choice(vals)
             lcm[i][j] = choice
             lcm[j][i] = choice
-    data_file = open('./datapoints.dat', 'ab')
-    pickle.dump(lcm, data_file)
-    data_file.close()
-    # print(lcm)
+    return lcm
 
 
 def generate_puv():
     """Generating T/F vector
     """
-    puv = [random.randint(0, 1) for _ in range(15)]
-    data_file = open('./datapoints.dat', 'wb')
-    pickle.dump(puv, data_file)
-    data_file.close()
+    return [random.randint(0, 1) for _ in range(15)]
+    
+
+def generate_parameters(num_datapoints = 10, lcm_values = [], file_name = ''):
+    points = generate_datatpoints(num_datapoints)
+    lcm = generate_LCM_matrix(lcm_values)
+    puv = generate_puv()
+    if not file_name:
+        return points, lcm, puv
+    with open(file_name, 'w') as f:
+        f.write(f"POINTS={points}")
+        f.write('\n')
+        f.write(f"LCM={lcm}")
+        f.write('\n')
+        f.write(f"PUV={puv}")
+        f.write('\n')
+    f.close()
+    return points, lcm, puv
 
 
-""" Unquote to generate the needed files """
-# x = number of points
-# generate_datatpoints(x=10)
-# generate_LCM_matrix()
-# generate_puv()
-data_file = open("./datapoints.dat", "rb")
-list_points = pickle.load(data_file)
-print(list_points)
+if __name__ == "__main__":
+    print(generate_parameters())
