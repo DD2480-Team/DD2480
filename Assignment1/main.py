@@ -214,6 +214,26 @@ def cmv_condition_11(points, G_PTS):
         if x_end - x_begin < 0:
             return True
     return False
+
+def cmv_condition_12(points, K_PTS, length1, length2): 
+    """
+    Checks if there are two points separated by K_PTS intervening points that are > lenght1 apart 
+    as well as two points separated by K_PTS intervening points that are < length2 apart
+
+    Args:
+        points (type: list of 2-tuples): contains (x,y) values
+        K_PTS (type: int): number of intervening points
+        length1 (type: float): minimum distance necessary
+        length2 (type: float): maximum distance between points 
+    """
+    def dist(p1, p2):
+        return math.sqrt((p1[0] - p2[0])**2 + (p1[1] - p2[1])**2)
+    for i in range(len(points) - K_PTS - 1):
+        p1 = points[i]
+        p2 = points[i + K_PTS + 1]
+        if dist(p1, p2) < length2:
+            return True and cmv_condition_7(points, K_PTS, length1)
+    return False
     
 if __name__ == "__main__":
     pass
