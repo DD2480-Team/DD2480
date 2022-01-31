@@ -24,13 +24,6 @@ class CMVCondition0TestCase(unittest.TestCase):
         length1 = 0
         self.assertFalse(cmv_condition_0(points, length1))
 
-    # must exist one set of two consecutive data points that are further than length1
-    # pass negative distance, should return False
-    def test4_check_condition_0(self):
-        points = [(0, 0), (4, 3)]  # dist is 5
-        length1 = -1
-        self.assertFalse(cmv_condition_0(points, length1))
-
 
 class CMVCondition1TestCase(unittest.TestCase):
     def test_points_inside_circle(self):
@@ -121,13 +114,6 @@ class CMVCondition3TestCase(unittest.TestCase):
         """
         points = [(2, 4), (1, -6), (5, 8)]
         self.assertTrue(cmv_condition_3(points, 5))
-
-    def test_area1_equals_zero(self):
-        """
-        AREA1 should not be 0 or negative
-        """
-        points = [(2, 4), (1, -6), (5, 8)]
-        self.assertFalse(cmv_condition_3(points, 0))
 
 
 class CMVCondition4TestCase(unittest.TestCase):
@@ -394,7 +380,7 @@ class CMVCondition10TestCase(unittest.TestCase):
     def test4_check_condition_10(self):
         e_pts = 1
         f_pts = 1
-        points = [(0, 0), (0, 0), (1, 1), (0, 0), (2, 0)]  # triangle: b=2, h=1 => a=1
+        points = [(0, 0), (0, 0), (1, 1), (2, 0)]  # triangle: b=2, h=1 => a=1
         area1 = 0.95
         self.assertFalse(cmv_condition_10(points, e_pts, f_pts, area1, len(points)))
 
@@ -535,14 +521,6 @@ class CMVCondition14TestCase(unittest.TestCase):
 
         points = [(2, 4), (1, -6), (10, 8), (0, 0), (2, 9), (-10, 0)]
         self.assertFalse(check_condition_14(points, 1, 1, 5, 10))
-
-    def test_area1_or_area2_invalid(self):
-
-        # area1 and area2 should not be 0 or negative
-
-        points = [(2, 4), (1, 1), (1, -6), (5, 8), (2, 2)]
-        self.assertFalse(check_condition_14(points, 1, 1, 0, 5))
-        self.assertFalse(check_condition_14(points, 1, 1, 5, -1))
 
 
 if __name__ == "__main__":

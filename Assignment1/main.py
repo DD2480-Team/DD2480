@@ -1,5 +1,8 @@
+from ctypes import util
+from email import utils
 import math
 import numpy as np
+from utils import *
 
 
 def cmv_condition_0(point_array, length1):
@@ -14,12 +17,10 @@ def cmv_condition_0(point_array, length1):
     Returns:
         (type: boolean) True if condition met, false otherwise
     """
-    if length1 < 0 or len(point_array) < 2:
+    if len(point_array) < 2:
         return False
     for i in range(len(point_array) - 1):
-        xdist = abs(point_array[i][0] - point_array[i + 1][0])
-        ydist = abs(point_array[i][1] - point_array[i + 1][1])
-        if math.sqrt(xdist**2 + ydist**2) > length1:
+        if distance_between_points(point_array[i], point_array[i + 1]) > length1:
             return True
     return False
 
@@ -39,18 +40,11 @@ def cmv_condition_1(points, radius):
         return False
     for i in range(len(points) - 2):
         p1, p2, p3 = points[i], points[i + 1], points[i + 2]
-        center = [(p1[0] + p2[0] + p3[0]) / 3, (p1[1] + p2[1] + p3[1]) / 3]
-
-        def distance_exceeds_radius(p):
-            squared_distance = (p[0] - center[0]) ** 2 + (p[1] - center[1]) ** 2
-            if squared_distance > radius**2:
-                return True
-            return False
-
+        center = calculate_center([p1, p2, p3])
         if (
-            distance_exceeds_radius(p1)
-            or distance_exceeds_radius(p2)
-            or distance_exceeds_radius(p3)
+            distance_exceeds_radius(p1, center, radius)
+            or distance_exceeds_radius(p2, center, radius)
+            or distance_exceeds_radius(p3, center, radius)
         ):
             return True
     return False
@@ -69,15 +63,11 @@ def cmv_condition_2(points, epsilon):
         True if condition is satisfied, false otherwise
     """
 
-    # returns the Euclidean distance between two points
-    def dist(p1, p2):
-        return math.sqrt((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2)
-
     # returns the angle formed by the line segments p1 -> p2 -> p3
     def get_angle(p1, p2, p3):  # p1, p2, p3 are points
-        v12 = dist(p1, p2)
-        v23 = dist(p2, p3)
-        v31 = dist(p3, p1)
+        v12 = distance_between_points(p1, p2)
+        v23 = distance_between_points(p2, p3)
+        v31 = distance_between_points(p3, p1)
         return math.acos((v12**2 + v23**2 - v31**2) / (2 * v12 * v23))
 
     for i in range(len(points) - 2):
@@ -109,12 +99,9 @@ def cmv_condition_3(points, area1):
     """
     if len(points) < 3:
         return False
-    if area1 <= 0:
-        return False
     total_points = len(points)
     for i in range(total_points - 2):
-        (x1, y1), (x2, y2), (x3, y3) = points[i], points[i + 1], points[i + 2]
-        area = 0.5 * (x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2))
+        area = calculate_area_triangle(points[i], points[i + 1], points[i + 2])
         if area >= area1:
             return True
     return False
@@ -126,9 +113,7 @@ def check_condition_4(point_array, Q_PTS, quad):
     """
 
     def number_of_quad(points):
-
         in_quads = [0, 0, 0, 0]
-
         for pt in points:
             if pt[0] >= 0 and pt[1] >= 0:
                 in_quads[0] = 1
@@ -183,10 +168,6 @@ def cmv_condition_6(points, N_PTS, dist):
     Returns:
         (type: boolean) True if condition met, false otherwise
     """
-
-    def distance_between_points(p1, p2):
-        return ((p2[0] - p1[0]) ** 2 + (p2[1] - p1[1]) ** 2) ** 0.5
-
     if len(points) < 3 or len(points) < N_PTS:
         return False
     for beginIdx in range(len(points) - N_PTS + 1):
@@ -225,16 +206,13 @@ def cmv_condition_7(points, K_PTS, length1):
         (type: boolean) True if condition met, False, otherwise
     """
 
-    def dist(p1, p2):
-        return math.sqrt((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2)
-
     if len(points) < 3:
         return False
 
     for i in range(len(points) - K_PTS - 1):
         p1 = points[i]
         p2 = points[i + K_PTS + 1]
-        if dist(p1, p2) > length1:
+        if distance_between_points(p1, p2) > length1:
             return True
     return False
 
@@ -261,39 +239,15 @@ def cmv_condition_8(points, a_pts, b_pts, radius1, numpoints):
     if numpoints < 5:
         return False
 
-    if a_pts < 1 or b_pts < 1:
-        return False
-    if (a_pts + b_pts) > numpoints - 3:
-        return False
-
-    """
-    explanation of indices:
-    take array of length 6: [1,0,1,0,0,1], A_PTS = 1, B_PTS = 2
-    need to check the points at index i, i+A_PTS+1, and i+A_PTS+1+B_PTS+1
-    """
     for i in range(numpoints - a_pts - b_pts - 2):
         p1 = points[i]
         p2 = points[i + a_pts + 1]
         p3 = points[i + a_pts + b_pts + 2]
-
-        x1, y1 = p1[0], p1[1]
-        x2, y2 = p2[0], p2[1]
-        x3, y3 = p3[0], p3[1]
-        # Same as calculations as cmv_1
-        center = [(x1 + x2 + x3) / 3, (y1 + y2 + y3) / 3]
-
-        def distance_exceeds_radius(x, y):
-            squared_distance = (x - center[0]) ** 2 + (y - center[1]) ** 2
-
-            if squared_distance > radius1**2:
-                # True if the point cannot be contained
-                return True
-            return False
-
+        center = calculate_center([p1, p2, p3])
         if (
-            distance_exceeds_radius(x1, y1)
-            or distance_exceeds_radius(x2, y2)
-            or distance_exceeds_radius(x3, y3)
+            distance_exceeds_radius(p1, center, radius1)
+            or distance_exceeds_radius(p2, center, radius1)
+            or distance_exceeds_radius(p3, center, radius1)
         ):
             return True
     # Both conditions failed
@@ -308,16 +262,7 @@ def check_condition_9(point_array, C_PTS, D_PTS, epsilon):
     angle > (PI+EPSILON)
     """
 
-    def dist(p1, p2):
-        return math.sqrt((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2)
-
-    def get_angle(p1, p2, p3):
-        v12 = dist(p1, p2)
-        v23 = dist(p2, p3)
-        v31 = dist(p3, p1)
-        return math.acos((v12**2 + v23**2 - v31**2) / (2 * v12 * v23))
-
-    if len(point_array) < 5 or len(point_array) < C_PTS + D_PTS + 3:
+    if len(point_array) < 5:
         return False
 
     for i in range(len(point_array) - C_PTS - 1 - D_PTS - 1):
@@ -326,14 +271,13 @@ def check_condition_9(point_array, C_PTS, D_PTS, epsilon):
             or point_array[i + C_PTS + 1] == point_array[i + C_PTS + 1 + D_PTS + 1]
         ):
             continue
-        angle = get_angle(
+        angle = calculate_angle_between_points(
             point_array[i],
             point_array[i + C_PTS + 1],
             point_array[i + C_PTS + 1 + D_PTS + 1],
         )
         if angle < math.pi - epsilon or angle > math.pi + epsilon:
             return True
-
     return False
 
 
@@ -352,29 +296,18 @@ def cmv_condition_10(point_array, e_pts, f_pts, area1, num_points):
     Returns:
         (boolean): True if condition met, false otherwise
     """
-    input_con1 = num_points > 5  # NUMPOINTS < 5 should return False
-    input_con2 = e_pts >= 1 and f_pts >= 1
-    input_con3 = e_pts + f_pts <= num_points - 3
-    if not (input_con1 and input_con2 and input_con3):
-        # print("incorrect input")
+    if num_points < 5:
         return False
 
     for i in range(len(point_array)):
         if i + e_pts + 1 + f_pts + 1 >= num_points:  # looped as far as possible
             break
-        vertex1 = point_array[i]
-        vertex2 = point_array[i + e_pts + 1]
-        vertex3 = point_array[i + e_pts + 1 + f_pts + 1]
         # use triangle coord formula
-        area = abs(
-            (
-                vertex1[0] * (vertex2[1] - vertex3[1])
-                + vertex2[0] * (vertex3[1] - vertex1[1])
-                + vertex3[0] * (vertex1[1] - vertex2[1])
-            )
-            / 2
+        area = calculate_area_triangle(
+            point_array[i],
+            point_array[i + e_pts + 1],
+            point_array[i + e_pts + 1 + f_pts + 1],
         )
-        # print(area)
         if area > area1:
             return True
     return False
@@ -404,7 +337,7 @@ def cmv_condition_11(points, G_PTS):
 
 def cmv_condition_12(points, K_PTS, length1, length2):
     """
-    Checks if there are two points separated by K_PTS intervening points that are > lenght1 apart
+    Checks if there are two points separated by K_PTS intervening points that are > length1 apart
     as well as two points separated by K_PTS intervening points that are < length2 apart
 
     Args:
@@ -414,13 +347,10 @@ def cmv_condition_12(points, K_PTS, length1, length2):
         length2 (type: float): maximum distance between points
     """
 
-    def dist(p1, p2):
-        return math.sqrt((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2)
-
     for i in range(len(points) - K_PTS - 1):
         p1 = points[i]
         p2 = points[i + K_PTS + 1]
-        if dist(p1, p2) < length2:
+        if distance_between_points(p1, p2) < length2:
             return True and cmv_condition_7(points, K_PTS, length1)
     return False
 
@@ -449,33 +379,19 @@ def cmv_condition_13(points, a_pts, b_pts, radius1, radius2, numpoints):
     """
     if numpoints < 5:
         return False
-    if radius2 <= 0:
-        return False
 
     for i in range(numpoints - a_pts - b_pts - 2):
         p1 = points[i]
         p2 = points[i + a_pts + 1]
         p3 = points[i + a_pts + b_pts + 2]
 
-        x1, y1 = p1[0], p1[1]
-        x2, y2 = p2[0], p2[1]
-        x3, y3 = p3[0], p3[1]
-
         # Same as calculations as cmv_1
-        center = [(x1 + x2 + x3) / 3, (y1 + y2 + y3) / 3]
-
-        def distance_exceeds_radius(x, y, radius):
-            squared_distance = (x - center[0]) ** 2 + (y - center[1]) ** 2
-
-            if squared_distance > radius**2:
-                # True if the point cannot be contained
-                return True
-            return False
+        center = calculate_center([p1, p2, p3])
 
         if (
-            not distance_exceeds_radius(x1, y1, radius2)
-            and not distance_exceeds_radius(x2, y2, radius2)
-            and not distance_exceeds_radius(x3, y3, radius2)
+            not distance_exceeds_radius(p1, center, radius2)
+            and not distance_exceeds_radius(p2, center, radius2)
+            and not distance_exceeds_radius(p3, center, radius2)
         ):
             return cmv_condition_8(points, a_pts, b_pts, radius1, numpoints)
 
@@ -492,23 +408,13 @@ def check_condition_14(point_array, E_PTS, F_PTS, area1, area2):
         less than AREA2.
     """
 
-    def get_area(p1, p2, p3):
-        return 0.5 * (
-            p1[0] * (p2[1] - p3[1]) + p2[0] * (p3[1] - p1[1]) + p3[0] * (p1[1] - p2[1])
-        )
-
-    if (
-        len(point_array) < 5
-        or len(point_array) < E_PTS + F_PTS + 3
-        or area1 <= 0
-        or area2 <= 0
-    ):
+    if len(point_array) < 5:
         return False
 
     conditions = [False, False]
 
     for i in range(len(point_array) - E_PTS - 1 - F_PTS - 1):
-        area = get_area(
+        area = calculate_area_triangle(
             point_array[i],
             point_array[i + E_PTS + 1],
             point_array[i + E_PTS + 1 + F_PTS + 1],
