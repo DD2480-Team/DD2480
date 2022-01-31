@@ -300,6 +300,43 @@ def cmv_condition_8(points, a_pts, b_pts, radius1, numpoints):
     return False
 
 
+def check_condition_9(point_array, C_PTS, D_PTS, epsilon):
+    """Check if there exists at least one set of three data points separated by exactly C PTS and D PTS
+    consecutive intervening points, respectively, that form an angle such that:
+    angle < (PI−EPSILON)
+        or
+    angle > (PI+EPSILON)
+    """
+
+    def dist(p1, p2):
+        return math.sqrt((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2)
+
+    def get_angle(p1, p2, p3):
+        v12 = dist(p1, p2)
+        v23 = dist(p2, p3)
+        v31 = dist(p3, p1)
+        return math.acos((v12**2 + v23**2 - v31**2) / (2 * v12 * v23))
+
+    if len(point_array) < 5 or len(point_array) < C_PTS + D_PTS + 3:
+        return False
+
+    for i in range(len(point_array) - C_PTS - 1 - D_PTS - 1):
+        if (
+            point_array[i] == point_array[i + C_PTS + 1]
+            or point_array[i + C_PTS + 1] == point_array[i + C_PTS + 1 + D_PTS + 1]
+        ):
+            continue
+        angle = get_angle(
+            point_array[i],
+            point_array[i + C_PTS + 1],
+            point_array[i + C_PTS + 1 + D_PTS + 1],
+        )
+        if angle < math.pi - epsilon or angle > math.pi + epsilon:
+            return True
+
+    return False
+
+
 def cmv_condition_10(point_array, e_pts, f_pts, area1, num_points):
     """Checks if there is a set of three data points, separated by
         e_pts and f_pts respectively, that form a triangle with an
