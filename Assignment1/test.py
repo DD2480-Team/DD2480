@@ -1,4 +1,3 @@
-from importlib.metadata import entry_points
 import unittest
 from main import *
 
