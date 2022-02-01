@@ -55,6 +55,26 @@ class CMV:
         self.AREA2 = AREA2
         self.LCM = LCM
         self.PUV = PUV
+        self.CMV_VECTOR = self.generate_vector()
+
+    def generate_vector(self):
+        return [
+            self.cmv_condition_0(),
+            self.cmv_condition_1(),
+            self.cmv_condition_2(),
+            self.cmv_condition_3(),
+            self.cmv_condition_4(),
+            self.cmv_condition_5(),
+            self.cmv_condition_6(),
+            self.cmv_condition_7(),
+            self.cmv_condition_8(),
+            self.cmv_condition_9(),
+            self.cmv_condition_10(),
+            self.cmv_condition_11(),
+            self.cmv_condition_12(),
+            self.cmv_condition_13(),
+            self.cmv_condition_14(),
+        ]
 
     def cmv_condition_0(self):
         """
@@ -158,7 +178,7 @@ class CMV:
                 return True
         return False
 
-    def check_condition_4(self):
+    def cmv_condition_4(self):
         """Checks if There exists at least one set of Q PTS consecutive data points that lie in more than QUADS
         quadrants.
         """
@@ -184,7 +204,7 @@ class CMV:
                 return True
         return False
 
-    def check_condition_5(self):
+    def cmv_condition_5(self):
         """
         Checks if there are two consecutive x-coords such that
             the first subtracted from the second is less than 0
@@ -299,7 +319,7 @@ class CMV:
         # Both conditions failed
         return False
 
-    def check_condition_9(self):
+    def cmv_condition_9(self):
         """Check if there exists at least one set of three data points separated by exactly C PTS and D PTS
         consecutive intervening points, respectively, that form an angle such that:
         angle < (PI−EPSILON)

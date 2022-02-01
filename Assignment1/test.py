@@ -145,21 +145,21 @@ class CMVCondition4TestCase(unittest.TestCase):
         self.CMV.POINTS = [(0, 0), (4, 3), (-1, -1), (2, -3)]
         self.CMV.Q_PTS = 3
         self.CMV.QUADS = 3
-        self.assertTrue(self.CMV.check_condition_4())
+        self.assertTrue(self.CMV.cmv_condition_4())
 
     # points lie in less than QUADS quadrants.
     def test_less_than_quad(self):
         self.CMV.POINTS = [(0, 0), (-2, 3), (6, 3), (2, 3)]
         self.CMV.Q_PTS = 2
         self.CMV.QUADS = 3
-        self.assertFalse(self.CMV.check_condition_4())
+        self.assertFalse(self.CMV.cmv_condition_4())
 
     # points lie on axis.
     def test_on_axis(self):
         self.CMV.POINTS = [(1, 0), (0, -1), (-1, 0)]
         self.CMV.Q_PTS = 3
         self.CMV.QUADS = 3
-        self.assertTrue(self.CMV.check_condition_4())
+        self.assertTrue(self.CMV.cmv_condition_4())
 
 
 """ Must exist at least one set of consecutive data points
@@ -173,22 +173,22 @@ class CMVCondition5TestCase(unittest.TestCase):
     # pass list where last element is smaller than second to last, should return True
     def test1_check_condition_5(self):
         self.CMV.POINTS = [(0, 0), (4, 3), (6, 3), (2, 3)]
-        self.assertTrue(self.CMV.check_condition_5())
+        self.assertTrue(self.CMV.cmv_condition_5())
 
     # pass list where x values only grow, should return False
     def test2_check_condition_5(self):
         self.CMV.POINTS = [(0, 0), (4, 3), (6, 3), (40, 3), (50, 3), (60, 3)]
-        self.assertFalse(self.CMV.check_condition_5())
+        self.assertFalse(self.CMV.cmv_condition_5())
 
     # pass list where all x values are the same, should return False
     def test3_check_condition_5(self):
         self.CMV.POINTS = [(0, 0), (0, 0), (0, 0), (0, 0), (0, 0)]
-        self.assertFalse(self.CMV.check_condition_5())
+        self.assertFalse(self.CMV.cmv_condition_5())
 
     # pass only one point, should return False
     def test4_check_condition_5(self):
         self.CMV.POINTS = [(0, 0)]  # dist undefined
-        self.assertFalse(self.CMV.check_condition_5())
+        self.assertFalse(self.CMV.cmv_condition_5())
 
 
 class CMVCondition6TestCase(unittest.TestCase):
@@ -345,7 +345,7 @@ class CMVCondition9TestCase(unittest.TestCase):
         self.CMV.C_PTS = 1
         self.CMV.D_PTS = 2
         self.CMV.EPSILON = (math.pi * 3) / 4
-        self.assertTrue(self.CMV.check_condition_9())
+        self.assertTrue(self.CMV.cmv_condition_9())
 
     # angle falls inside the excluded range
     def test_inside_angle(self):
@@ -353,7 +353,7 @@ class CMVCondition9TestCase(unittest.TestCase):
         self.CMV.C_PTS = 1
         self.CMV.D_PTS = 2
         self.CMV.EPSILON = (math.pi * 3) / 4
-        self.assertFalse(self.CMV.check_condition_9())
+        self.assertFalse(self.CMV.cmv_condition_9())
 
     # points have coincidence
     def test_points_coincidence(self):
@@ -361,7 +361,7 @@ class CMVCondition9TestCase(unittest.TestCase):
         self.CMV.C_PTS = 1
         self.CMV.D_PTS = 1
         self.CMV.EPSILON = math.pi / 2
-        self.assertFalse(self.CMV.check_condition_9())
+        self.assertFalse(self.CMV.cmv_condition_9())
 
     # points are not enough to be seperate by C_PTS points and D_PTS points
     def test_points_not_enough(self):
@@ -369,7 +369,7 @@ class CMVCondition9TestCase(unittest.TestCase):
         self.CMV.C_PTS = 1
         self.CMV.D_PTS = 1
         self.CMV.EPSILON = math.pi / 2
-        self.assertFalse(self.CMV.check_condition_9())
+        self.assertFalse(self.CMV.cmv_condition_9())
 
 
 class CMVCondition10TestCase(unittest.TestCase):
