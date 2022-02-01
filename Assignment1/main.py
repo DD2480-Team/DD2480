@@ -31,6 +31,32 @@ def form_the_pum(cmv, lcm):
                 pum[j][i] = True
     return pum
 
+   
+def form_the_fuv(puv, pum):
+    """
+    he Final Unlocking Vector (FUV) is generated from the Preliminary Unlocking Matrix. 
+    The input PUV indicates whether the corresponding LIC is to be considered as a factor in signaling interceptor launch. 
+    FUV[i] should be set to true if PUV[i] is false (indicating that the associated LIC should not hold back launch) 
+    or if all elements in PUM row i are true (not including the current index as per Ex 3).
+
+    Ex 1. FUV[0] is False because PUV[0] is True, but PUM[0,1] and PUM[0,3] are False.
+    Ex 2. FUV[1] is True because PUV[1] is False.  
+    Ex 3. FUV[2] is True because PUV[2] is True and PUM[2,i] is True for all i != 2, 0 ≤ i ≤ 14.
+
+    Args:
+        pum (2D-list): 15*15 matrix of boolean values
+        puv (list): length 15 matrix of boolean values indicating which LIC should hold back launch
+
+    Returns:
+        fuv (list): length 15 matrix of boolean values
+    """
+    #the value of the fuv is True when corresponding value of the puv is False
+    fuv = [not x for x in puv]
+    for i in range(15):
+        fuv[i] = True if len([x for x in pum[i] if x]) >= 14 else fuv[i]
+    print(fuv)
+
+    return fuv
 
 if __name__ == "__main__":
     cmv = read_CMV_PUV_LCM_from_file()
