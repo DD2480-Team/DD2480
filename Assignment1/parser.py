@@ -2,6 +2,7 @@ from argparse import ArgumentError
 from cmath import pi
 from pathlib import Path
 import ast
+from cmv import CMV
 
 
 def read_CMV_PUV_LCM_from_file(f="input.txt"):
@@ -11,6 +12,7 @@ def read_CMV_PUV_LCM_from_file(f="input.txt"):
         input_file = open(file_location, "r")
         input = input_file.read()
         input_array = input.split("\n")
+        input_file.close()
     except:
         raise ArgumentError(
             "name your file input.txt in the same directory and is line separated"
@@ -75,6 +77,32 @@ def read_CMV_PUV_LCM_from_file(f="input.txt"):
     assert len(LCM) == 15 and all([len(row) == 15 for row in LCM])
     PUV = ast.literal_eval(input_array[22])
     assert len(PUV) == 15
+
+    return CMV(
+        NUMPOINTS,
+        POINTS,
+        LENGTH1,
+        RADIUS1,
+        EPSILON,
+        AREA1,
+        Q_PTS,
+        QUADS,
+        DIST,
+        N_PTS,
+        K_PTS,
+        A_PTS,
+        B_PTS,
+        C_PTS,
+        D_PTS,
+        E_PTS,
+        F_PTS,
+        G_PTS,
+        LENGTH2,
+        RADIUS2,
+        AREA2,
+        LCM,
+        PUV,
+    )
 
 
 if __name__ == "__main__":
