@@ -657,5 +657,47 @@ class FormPumTestCase(unittest.TestCase):
             [False, False, True, False, True, False, True, False, False, False, False, True, True, True, False]]
         self.assertTrue(form_the_pum(cmv, lcm) == pum)
 
+class FormFuvTestCase(unittest.TestCase):
+    puv = [True,False,True,True,False,
+        False,False,False,False,False,
+        False,False,False,False,False]
+
+    pum = [
+    [False,False,False,True,True,True,True,True,True,True,True,True,True,True,True],
+    [False,False,False,False,False,False,False,False,False,False,False,False,False,False,False],
+    [True,True,False,True,True,True,True,True,True,True,True,True,True,True,True],
+    [True,True,False,False,True,True,True,True,True,True,True,True,True,True,True],
+    [True,True,False,False,True,True,True,True,True,True,True,True,True,True,True],
+    [False,False,False,False,False,False,False,False,False,False,False,False,False,False,False],
+    [False,False,False,False,False,False,False,False,False,False,False,False,False,False,False],
+    [False,False,False,False,False,False,False,False,False,False,False,False,False,False,False],
+    [False,False,False,False,False,False,False,False,False,False,False,False,False,False,False],
+    [False,False,False,False,False,False,False,False,False,False,False,False,False,False,False],
+    [False,False,False,False,False,False,False,False,False,False,False,False,False,False,False],
+    [False,False,False,False,False,False,False,False,False,False,False,False,False,False,False],
+    [False,False,False,False,False,False,False,False,False,False,False,False,False,False,False],
+    [False,False,False,False,False,False,False,False,False,False,False,False,False,False,False],
+    [False,False,False,False,False,False,False,False,False,False,False,False,False,False,False]]
+
+    fuv = form_the_fuv(puv, pum)
+    
+    #FUV[0] is false because PUV[0] is true, but PUM[0,1] and PUM[0,3] are false.
+    def test_Ex1(self):
+        self.assertFalse(self.fuv[0])
+
+    #FUV[1] is true because PUV[1] is false.
+    def test_Ex2(self):
+        self.assertTrue(self.fuv[1])
+
+    #FUV[2] is true because PUV[2] is true and PUM[2,i] is true for all i != 2, 0 ≤ i ≤ 14
+    def test_Ex3(self):
+        self.assertTrue(self.fuv[2])
+
+    #if even one item of the list pum[4] is False (outside of pum[4][4]), fuv[4] is false
+    def test_puv_True_one_pum_False(self):
+        self.assertFalse(self.fuv[3])
+
+
+
 if __name__ == "__main__":
     unittest.main()
