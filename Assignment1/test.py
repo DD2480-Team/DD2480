@@ -657,5 +657,19 @@ class FormPumTestCase(unittest.TestCase):
             [False, False, True, False, True, False, True, False, False, False, False, True, True, True, False]]
         self.assertTrue(form_the_pum(cmv, lcm) == pum)
 
+class LaunchTestCase(unittest.TestCase):
+
+    def test_all_True(self):
+        fuv = [True,True,True,True,True,True,True,True,True,True,True,True,True,True,True]
+        self.assertTrue(launch(fuv))
+    
+    def test_one_False(self):
+        fuv = [True,True,True,True,True,True,False,True,True,True,True,True,True,True,True]
+        self.assertFalse(launch(fuv))
+
+    def test_all_False(self):
+        fuv = [False,False,False,False,False,False,False,False,False,False,False,False,False,False,False]
+        self.assertFalse(launch(fuv))
+
 if __name__ == "__main__":
     unittest.main()
