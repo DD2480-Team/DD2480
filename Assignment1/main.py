@@ -31,6 +31,19 @@ def form_the_pum(cmv, lcm):
                 pum[j][i] = True
     return pum
 
+def launch(fuv):
+    """
+    the final launch/no launch decision is based on the FUV. 
+    The decision to launch requires that all elements in the FUV be true, 
+    i.e. LAUNCH should be set to true if and only if FUV[i] is true for all i, 0 ≤ i ≤ 14. 
+
+    Args:
+        fuv (list): a length 15 list of boolean values 
+
+    Returns:
+        boolean: returns True if False is not an element of the fuv
+    """
+    return False not in fuv
 
 if __name__ == "__main__":
     cmv = read_CMV_PUV_LCM_from_file()
