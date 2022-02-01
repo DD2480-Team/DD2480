@@ -13,7 +13,7 @@ def generate_datatpoints(x):
     ]
 
 
-def generate_LCM_matrix(vals):
+def generate_LCM_matrix(vals=[]):
     """Generating 15x15 matrix with values "ANDD", "ORR", "NOTUSED" """
     vals = ["ANDD", "ORR", "NOTUSED"] if not vals else vals
     for v in vals:
@@ -32,7 +32,8 @@ def generate_LCM_matrix(vals):
 
 def generate_puv():
     """Generating T/F vector"""
-    return [random.randint(0, 1) for _ in range(15)]
+
+    return [[True, False][random.randint(0, 1)] for _ in range(15)]
 
 
 def generate_parameters(num_datapoints=10, lcm_values=[], file_name=""):
