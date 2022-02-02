@@ -13,7 +13,7 @@ class FormFUVTestCase(unittest.TestCase):
         lcm = generate_LCM_matrix()
         pum = form_the_pum(cmv.CMV_VECTOR, lcm)
         fuv = form_the_fuv(pum, puv)
-        self.assertTrue(all([fuv[i] for i in range(len(fuv))]))
+        self.assertTrue(all(fuv))
 
     def test_successful_launch_2(self):
         puv = [True for _ in range(15)]
@@ -21,7 +21,7 @@ class FormFUVTestCase(unittest.TestCase):
         lcm = generate_LCM_matrix(vals=["NOTUSED"])
         pum = form_the_pum(cmv.CMV_VECTOR, lcm)
         fuv = form_the_fuv(pum, puv)
-        self.assertTrue(all([fuv[i] for i in range(len(fuv))]))
+        self.assertTrue(all(fuv))
 
     def test_failed_launch_1(self):
         puv = [True for _ in range(15)]
@@ -29,10 +29,13 @@ class FormFUVTestCase(unittest.TestCase):
         lcm = generate_LCM_matrix(vals=["ORR"])
         pum = form_the_pum(cmv.CMV_VECTOR, lcm)
         fuv = form_the_fuv(pum, puv)
-        self.assertFalse(all([fuv[i] for i in range(len(fuv))]))
+        self.assertFalse(all(fuv))
 
     # specifying an incorrect K_PTS = -1 causes
     # the program to raise an assertion error
     def test_failed_launch(self):
         with self.assertRaises(AssertionError):
             read_CMV_PUV_LCM_from_file("invalid_input.txt")
+
+if __name__ == "__main__":
+    unittest.main()
