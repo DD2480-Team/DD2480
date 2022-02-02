@@ -34,9 +34,13 @@ The launch decision, is printed as ”YES” or ”NO” on the standard output.
 1. Clone this repository
 2. Inside a shell, run:
 ```sh
-python main.py
+$ python main.py True
 ```
-TODO: Descibe how to run the program.
+or 
+
+```sh
+$ python main.py False
+```
 
 
 ## Input files format
