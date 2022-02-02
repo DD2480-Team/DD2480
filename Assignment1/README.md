@@ -16,7 +16,7 @@
   <a href="#usage">Usage</a> •
   <a href="#input-files-format">Input files format</a> •
   <a href="#credits">Credits</a> •
-  <a href="#licence">Licence</a> •
+  <a href="#license">License</a>
 </p>  
                                                               
 ## About The Project
