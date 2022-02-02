@@ -23,7 +23,7 @@
 
 This project corresponds to Software Engineering (DD2480) Assignment 1.   
 
-The DECIDE() function (hypothetical anti-ballistic system) generates a boolean signal which determines whether an interceptor should be
+The program simulates an hypothetical anti-ballistic system, and generates a boolean signal which determines whether an interceptor should be
 launched based on the input parameters described in the input file format.
 
 
