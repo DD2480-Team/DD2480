@@ -15,6 +15,17 @@ def parse_args(arg):
     else:
         raise argparse.ArgumentError(None, "ensure one boolean argument is provided")
 
+def DECIDE(puv, lcm):
+    cmv = read_CMV_PUV_LCM_from_file()
+    pum = form_the_pum(cmv.CMV_VECTOR, lcm)
+    fuv = form_the_fuv(pum, puv)
+
+    if all(fuv):
+        print("YES")
+        return True
+    else:
+        print("NO")
+        return False
 
 def launch(should_launch):
     puv = [False for _ in range(15)] if should_launch else [True for _ in range(15)]
@@ -29,8 +40,10 @@ def launch(should_launch):
     print(f"The FUV vector is {fuv}")
     if all([fuv[i] for i in range(len(fuv))]):
         print("The rocket has been launched!")
+        return True
     else:
         print("The rocket has not been launched")
+        return False
 
 
 def form_the_pum(cmv, lcm):
