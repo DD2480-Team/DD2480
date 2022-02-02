@@ -15,8 +15,19 @@ def parse_args(arg):
     else:
         raise argparse.ArgumentError(None, "ensure one boolean argument is provided")
 
-def DECIDE(puv, lcm):
-    cmv = read_CMV_PUV_LCM_from_file()
+def DECIDE(puv, lcm, cmv):
+    """The program simulates an hypothetical anti-ballistic system, and generates a 
+    boolean signal which determines whether an interceptor should be launched based 
+    on the input parameters described in the input file format.
+
+    Args:
+        puv (1x15 Bool array): Preliminary Unlocking Vector
+        lcm (15x15 Bool matrix): Logical Connector Matrix 
+        cmv (1x15 Bool array): Conditions Met vector
+
+    Returns:
+        [Bool]: True if missile launched, False otherwise
+    """
     pum = form_the_pum(cmv.CMV_VECTOR, lcm)
     fuv = form_the_fuv(pum, puv)
 
@@ -38,7 +49,9 @@ def launch(should_launch):
     print(f"The pum matrix is {pum}")
     fuv = form_the_fuv(pum, puv)
     print(f"The FUV vector is {fuv}")
-    if all([fuv[i] for i in range(len(fuv))]):
+    print(" ")
+    fire = DECIDE(puv, lcm, cmv)
+    if fire:
         print("The rocket has been launched!")
         return True
     else:
