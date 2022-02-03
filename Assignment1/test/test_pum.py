@@ -1,5 +1,5 @@
 import unittest
-from pum import *
+from lib.pum import *
 
 
 class FormPumTestCase(unittest.TestCase):
@@ -538,6 +538,7 @@ class FormPumTestCase(unittest.TestCase):
             ],
         ]
         self.assertTrue(form_the_pum(cmv, lcm) == pum)
+
 
 if __name__ == "__main__":
     unittest.main()

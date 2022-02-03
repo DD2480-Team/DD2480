@@ -1,8 +1,8 @@
 import argparse
-from fuv import form_the_fuv
-from generate_datapoints import generate_LCM_matrix
-from parser import *
-from pum import form_the_pum
+from lib.fuv import form_the_fuv
+from lib.generate_datapoints import generate_LCM_matrix
+from lib.parser import *
+from lib.pum import form_the_pum
 import sys
 
 
@@ -15,14 +15,15 @@ def parse_args(arg):
     else:
         raise argparse.ArgumentError(None, "ensure one boolean argument is provided")
 
+
 def DECIDE(puv, lcm, cmv):
-    """The program simulates an hypothetical anti-ballistic system, and generates a 
-    boolean signal which determines whether an interceptor should be launched based 
+    """The program simulates an hypothetical anti-ballistic system, and generates a
+    boolean signal which determines whether an interceptor should be launched based
     on the input parameters described in the input file format.
 
     Args:
         puv (1x15 Bool array): Preliminary Unlocking Vector
-        lcm (15x15 Bool matrix): Logical Connector Matrix 
+        lcm (15x15 Bool matrix): Logical Connector Matrix
         cmv (1x15 Bool array): Conditions Met vector
 
     Returns:
@@ -37,6 +38,7 @@ def DECIDE(puv, lcm, cmv):
     else:
         print("NO")
         return False
+
 
 def launch(should_launch):
     puv = [False for _ in range(15)] if should_launch else [True for _ in range(15)]

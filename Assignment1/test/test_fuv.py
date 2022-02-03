@@ -1,9 +1,9 @@
 import unittest
-from fuv import *
-from cmv import *
-from pum import *
-from parser import *
-from generate_datapoints import *
+from lib.fuv import *
+from lib.cmv import *
+from lib.pum import *
+from lib.parser import *
+from lib.generate_datapoints import *
 
 
 class FormFUVTestCase(unittest.TestCase):
@@ -35,7 +35,8 @@ class FormFUVTestCase(unittest.TestCase):
     # the program to raise an assertion error
     def test_failed_launch(self):
         with self.assertRaises(AssertionError):
-            read_CMV_PUV_LCM_from_file("invalid_input.txt")
+            read_CMV_PUV_LCM_from_file("test/invalid_input.txt")
+
 
 if __name__ == "__main__":
     unittest.main()

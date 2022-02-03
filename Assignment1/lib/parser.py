@@ -2,11 +2,11 @@ from argparse import ArgumentError
 from cmath import pi
 from pathlib import Path
 import ast
-from cmv import CMV
+from lib.cmv import CMV
 
 
 def read_CMV_PUV_LCM_from_file(f="input.txt"):
-    script_location = Path(__file__).absolute().parent
+    script_location = Path(__file__).absolute().parent.parent
     file_location = script_location / f
     try:
         input_file = open(file_location, "r")

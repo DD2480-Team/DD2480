@@ -1,9 +1,8 @@
 import unittest
-from cmv import *
-from pum import *
-from parser import *
+from lib.parser import *
+from lib.cmv import *
+from lib.generate_datapoints import *
 from main import *
-from generate_datapoints import *
 
 
 class CMVCondition0TestCase(unittest.TestCase):
