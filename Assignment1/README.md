@@ -14,6 +14,7 @@
 <p align="center">
   <a href="#about-the-project">About The Project</a> •
   <a href="#usage">Usage</a> •
+  <a href="testing">Testing</a> •
   <a href="#input-files-format">Input files format</a> •
   <a href="#credits">Credits</a> •
   <a href="#license">License</a>
@@ -33,6 +34,7 @@ The launch decision, is printed as ”YES” or ”NO” on the standard output.
 
 1. Clone this repository
 2. Inside a shell, run:
+
 ```sh
 $ python main.py True
 ```
@@ -41,7 +43,15 @@ or
 ```sh
 $ python main.py False
 ```
+## Testing
 
+To run the tests:
+
+``sh
+$ python -m unittest discover
+```
+
+Discover finds all the unitests inside the directory. Every function beginning with `test_` will be run by the tester. 
 
 ## Input files format
 
