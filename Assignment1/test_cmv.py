@@ -242,6 +242,8 @@ class CMVCondition7TestCase(unittest.TestCase):
     def setUp(self):
         self.CMV = read_CMV_PUV_LCM_from_file()
 
+    # true, because there are two points separated by K_pts intervening points such that the distance
+    # between the points is greater than length1
     def test_simple_true_case(self):
         self.CMV.POINTS = [(0, 0), (0, 0), (0, 0), (0, 0), (24.5, 0)]
         self.CMV.K_PTS = 3
@@ -249,20 +251,23 @@ class CMVCondition7TestCase(unittest.TestCase):
         self.assertTrue(self.CMV.cmv_condition_7())
 
     # testing smallest case with three points
+    # true because the two points, separated by one point, are distance 11 apart, which is more than length1 (11>10)
     def test_only_three_points(self):
         self.CMV.POINTS = [(0, 0), (0, 0), (11, 0)]
         self.CMV.K_PTS = 1
         self.CMV.LENGTH1 = 10.0
         self.assertTrue(self.CMV.cmv_condition_7())
 
-    # false if the distance between points is not greater than length
+    # false if the distance between points is not greater than length1; two points that are separated by k_pts are 
+    # only length1 apart, so the condition is not met
     def test_equal_to_length(self):
         self.CMV.POINTS = [(0, 0), (0, 0), (0, 0), (0, 0), (10, 0)]
         self.CMV.K_PTS = 3
         self.CMV.LENGTH1 = 10
         self.assertFalse(self.CMV.cmv_condition_7())
 
-    # false if the points aren't K_PTS apart in the array
+    # false if the points aren't K_PTS apart in the array; the two points that satisfy the length condition aren't
+    # k_pts apart, so this test case fails 
     def test_not_K_PTS_away(self):
         self.CMV.POINTS = [(0, 0), (0, 0), (0, 0), (100, 0), (0, 0)]
         self.CMV.K_PTS = 3
@@ -468,6 +473,8 @@ class CMVCondition12TestCase(unittest.TestCase):
     def setUp(self):
         self.CMV = read_CMV_PUV_LCM_from_file()
 
+    # testing a simple true case where there are two points in the array separated by k_pts that are 
+    # more than distance length1 apart and less than distance length2 apart
     def test_simple_true_case(self):
         self.CMV.POINTS = [(0, 0), (0, 0), (0, 0), (0, 0), (10, 0)]
         self.CMV.K_PTS = 3
@@ -475,6 +482,7 @@ class CMVCondition12TestCase(unittest.TestCase):
         self.assertTrue(self.CMV.cmv_condition_12())
 
     # testing smallest case with three points
+    # true because there are two points k_pts apart that are more than distance length1 apart and less than distance length2 apart
     def test_only_three_points(self):
         self.CMV.POINTS = [(0, 0), (0, 0), (11, 0)]
         self.CMV.K_PTS = 1
@@ -488,7 +496,8 @@ class CMVCondition12TestCase(unittest.TestCase):
         self.CMV.LENGTH1, self.CMV.LENGTH2 = 9, 10
         self.assertFalse(self.CMV.cmv_condition_12())
 
-    # false if the points aren't K_PTS apart in the array
+    # false if the points aren't separated by K_PTS in the array, here the relevant points that must be greater than distance length1 
+    # apart are only separated by 2 intervening points, when there must be 3 for the condition to be true.
     def test_not_K_PTS_away(self):
         self.CMV.POINTS = [(0, 0), (0, 0), (0, 0), (90, 0), (100, 0)]
         self.CMV.K_PTS = 3
