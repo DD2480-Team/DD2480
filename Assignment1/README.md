@@ -76,7 +76,7 @@ To use the parser (`parser.py`) with a text file, the arguments should follow th
 | list           | PUV            |
 
 ## Credits
-Work by Group 28.
+Work by Group 28. Our processes and workflow [are documented and summarised](https://docs.google.com/document/d/1Op0DMf0LeIO14TsSgexQ96vfdH4YPQFiMd0sS3l7H8Q/edit) in a separate document.
 
 Group [logo](https://emoji.gg/emoji/ngameboy).
 
