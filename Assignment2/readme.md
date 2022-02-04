@@ -6,7 +6,7 @@ Important to make an account as Gautam stated, or we will loose the servers ever
 
 The important part is to connect your account with the `authtoken`.
 
-[Sign up and download ngrok](https://dashboard.ngrok.com/get-started/setup)and ![do the authken](ngrok.png)
+[Sign up and download ngrok](https://dashboard.ngrok.com/get-started/setup) and ![do the authken](ngrok.png)
 
 ## Flask:
 
@@ -107,7 +107,24 @@ You can see the message typed in the issue:
 
 ![issue](flask_issue.png)
 
+
+
 # TODO:
 
 - [ ] find how to isolate those json messages!
-- [ ] do the build + test part inside the server.
+  
+  The correct syntax is apparently with a getter `.get()` (ex: `request.headers.get('X-Github-Event')`) but it is not straightforward to get nested objects
+- [ ] find out how to send build + test instructions inside the server.
+
+# Troubleshooting
+
+## Adress already in use:
+
+```
+lsof -i :4567
+```
+
+and then
+```
+kill <PID>
+```
