@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def home_page():
-    return "HOME!"
+    return "HOME PAGE!"
 
 #testing Jacobs PR
 @app.route('/github', methods=['POST'])
