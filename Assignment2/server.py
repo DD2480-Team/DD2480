@@ -3,10 +3,11 @@ from flask import Flask, request
 from git import Repo
 import json
 import gitfunctions
+import build
 
 app = Flask(__name__)
 
-defaultBranch = "master"
+defaultBranch = "push_for_testing"
 
 @app.route('/')
 def home_page():
@@ -26,7 +27,11 @@ def webhook_message():
             print(message)
             #create a git repo object, from which you can change branches as you please
             gitRepo = gitfunctions.GitRepo(defaultBranch)
-        return "sucess"
+            syntaxCheck = build.SyntaxCheck(gitRepo.repoLocalPath + "Assignment2/server.py")
+            if syntaxCheck.result == True:
+                return "success"
+            else:
+                return "failure"
 
 if __name__=='__main__':
     app.secret_key = 'super secret key'
