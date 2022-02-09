@@ -5,7 +5,7 @@ from git import Repo
 import json
 import gitfunctions
 import os
-
+import build
 
 app = Flask(__name__)
 #configuration for the mail client
@@ -23,7 +23,7 @@ app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 mail = Mail(app)
 
-defaultBranch = "master"
+defaultBranch = "push_for_testing"
 
 @app.route('/')
 def home_page():
@@ -70,7 +70,11 @@ def webhook_message():
             print(message)
             #create a git repo object, from which you can change branches as you please
             gitRepo = gitfunctions.GitRepo(defaultBranch)
-        return "success"
+            syntaxCheck = build.SyntaxCheck(gitRepo.repoLocalPath + "Assignment2/server.py")
+            if syntaxCheck.result == True:
+                return "success"
+            else:
+                return "failure"
 
 if __name__=='__main__':
     app.secret_key = 'super secret key'
