@@ -1,14 +1,21 @@
 from __future__ import print_function
 from flask import Flask, request
+from git import Repo
 import json
+import gitfunctions
+app = Flask(__name__)
+
+defaultBranch = "master"
+import build
 
 app = Flask(__name__)
+
+defaultBranch = "push_for_testing"
 
 @app.route('/')
 def home_page():
     return "HOME PAGE!"
 
-#testing Jacobs PR
 @app.route('/github', methods=['POST'])
 def webhook_message():
     if request.method == "POST":
@@ -21,8 +28,13 @@ def webhook_message():
             email = owner["email"]
             message = "user: {} \nemail: {}".format(name,email)
             print(message)
-        return "sucess"
-
+            #create a git repo object, from which you can change branches as you please
+            gitRepo = gitfunctions.GitRepo(defaultBranch)
+            syntaxCheck = build.SyntaxCheck(gitRepo.repoLocalPath + "Assignment2/server.py")
+            if syntaxCheck.result == True:
+                return "success"
+            else:
+                return "failure"
 
 if __name__=='__main__':
     app.secret_key = 'super secret key'
