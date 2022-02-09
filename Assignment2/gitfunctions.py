@@ -19,6 +19,7 @@ class GitRepo:
                 self.repo = Repo(gitDir)
             else:
                 raise
+        self.repoLocalPath = gitDir
         pullinfo = self.repo.git.pull()     #call git pull directly and read from stdout
         print(pullinfo)
         #self.checkoutBranch("master")          #How to checkout a local branch  
