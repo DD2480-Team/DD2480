@@ -3,6 +3,9 @@ from flask import Flask, request
 from git import Repo
 import json
 import gitfunctions
+app = Flask(__name__)
+
+defaultBranch = "master"
 import build
 
 app = Flask(__name__)
