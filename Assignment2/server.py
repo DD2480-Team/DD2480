@@ -26,7 +26,7 @@ def webhook_message():
             print(message)
             #create a git repo object, from which you can change branches as you please
             gitRepo = gitfunctions.GitRepo(defaultBranch)
-        return "sucess"
+        return "success"
 
 if __name__=='__main__':
     app.secret_key = 'super secret key'
