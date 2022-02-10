@@ -60,7 +60,7 @@ ngrok http 4567
 
 copy the url of the form http://x-x-x-x-x.ngrok.io and navigate to the webhooks interface of the repo you wish to work with. Add the url as the Payload URL with '/github', and select the following options:
 
-![github webhook](github_webhook.png)
+<img src="github_webhook.png" width="50%" height="50%">
   
 Once the webhook is added and the server is running, push events on github will trigger the CI suite! 
 
