@@ -76,6 +76,15 @@ def email_notification():
 
 @app.route("/github", methods=["POST"])
 def webhook_message():
+    """
+    Endpoint for Github webhooks to send data for push events.
+    Clones the edited branch, conducts syntax checking and saves
+    the build result to a database.
+
+    Returns:
+        201 if the data was saved correctly, 400 if the input JSON parameters
+        or X-Github-Event header is incorrect
+    """
     if (
         "X-Github-Event" in request.headers
         and request.headers["X-Github-Event"] == "push"

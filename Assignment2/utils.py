@@ -4,6 +4,11 @@ import time
 
 
 def save_json_to_build(data):
+    """
+    Takes in JSON data for a push github request and saves data regarding the
+    repository name, owner, url, timestamp, pusher and branch to the
+    SQLite database.
+    """
     try:
         repository = data["repository"]
         repo_name = repository["name"]
@@ -28,6 +33,10 @@ def save_json_to_build(data):
 
 
 def update_build_with_syntax_check(build, syntax_result):
+    """
+    Takes in a previous build saved to the database and edits the
+    the "syntax result" to indicate whether a build was successful or not
+    """
     record_found = Build.query.filter_by(
         pusher=build.pusher, timestamp=build.timestamp
     ).first()
@@ -36,4 +45,5 @@ def update_build_with_syntax_check(build, syntax_result):
 
 
 def get_all_builds():
+    "Queries all builds in the database"
     return Build.query.all()
