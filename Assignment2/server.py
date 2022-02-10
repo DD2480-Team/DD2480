@@ -37,8 +37,8 @@ app.config["MAIL_USE_TLS"] = False
 app.config["MAIL_USE_SSL"] = True
 mail = Mail(app)
 
-defaultBranch = "master"
-allowTests = True
+defaultBranch = "issue-68-listing-past-builds"
+allowTests = False
 
 
 @app.route("/")
