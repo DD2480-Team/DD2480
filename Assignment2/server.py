@@ -5,8 +5,11 @@ from flask_mail import Message, Mail
 from git import Repo
 import json
 import gitfunctions
-import os
 import build
+import test
+import pathlib
+import os
+
 app = Flask(__name__)
 # configuration for the mail client
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
@@ -72,16 +75,30 @@ def webhook_message():
             email = owner["email"]
             message = "user: {} \nemail: {}".format(name, email)
             print(message)
-            # create a git repo object, from which you can change branches as you please
-            gitRepo = gitfunctions.GitRepo(branch)
-            syntaxCheck = build.SyntaxCheck(
-                gitRepo.repoLocalPath + "Assignment2/server.py")
-            if syntaxCheck.result == True:
-                return "success"
-            else:
+
+
+
+
+
+            #create a git repo object, from which you can change branches as you please
+            gitRepo = gitfunctions.GitRepo(defaultBranch)
+
+            syntaxCheck = build.SyntaxCheck(gitRepo.repoLocalPath + "Assignment2/server.py")
+            if syntaxCheck.result == False:
                 return "failure"
+            
+            testing = test.Test(gitRepo.repoLocalPath + "Assignment2/test_server.py")
+            if testing.result == False:
+                return "failure"
+            else:
+                return "success"
         else:
             return "Not a push event."
+
+
+
+
+
 
 
 if __name__ == '__main__':
