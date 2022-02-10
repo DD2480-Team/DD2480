@@ -1,3 +1,11 @@
+email setutp
+uses flask_mail (https://pythonhosted.org/Flask-Mail/) to create mail client, and send a test email
+run "pip3 install Flask-Mail" to install flask_mail
+under the deactivate function in env/bin/activate include the lines:
+export USER2480="the_email"
+export PASS2480="the_password"
+in order to authenticate the sender
+
 # Run through
 
 ## ngrok
