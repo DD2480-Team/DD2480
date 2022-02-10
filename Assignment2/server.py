@@ -9,7 +9,7 @@ import pathlib
 
 app = Flask(__name__)
 
-defaultBranch = "branch_for_testing"
+defaultBranch = "master"
 
 @app.route('/')
 def home_page():
@@ -35,11 +35,11 @@ def webhook_message():
                 return "failure"
 
             # not sure if this is a valid method
-            print(str(pathlib.Path(__file__).parent.resolve()))
-            if gitRepo.repoLocalPath[2:] not in str(pathlib.Path(__file__).parent.resolve()):
-                testing = test.Test(gitRepo.repoLocalPath + "Assignment2/test_server.py")
-                if testing.result == False:
-                    return "failure"
+            #print(str(pathlib.Path(__file__).parent.resolve()))
+            #if gitRepo.repoLocalPath[2:] not in str(pathlib.Path(__file__).parent.resolve()):
+            testing = test.Test(gitRepo.repoLocalPath + "Assignment2/test_server.py")
+            if testing.result == False:
+                return "failure"
             
             return "success"
 
