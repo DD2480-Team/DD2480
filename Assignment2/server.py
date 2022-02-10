@@ -4,12 +4,12 @@ from flask import Flask, request
 from flask_mail import Message, Mail
 from git import Repo
 import json
-import gitfunctions=
+import gitfunctions
 import os
 import build
 app = Flask(__name__)
-#configuration for the mail client
-app.config['MAIL_SERVER']='smtp.gmail.com'
+# configuration for the mail client
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 465
 """
 uses os.environ.get to access secret variables stored in env/bin/activate
@@ -24,11 +24,12 @@ app.config['MAIL_USE_SSL'] = True
 mail = Mail(app)
 
 defaultBranch = "master"
-import build
+
 
 @app.route('/')
 def home_page():
     return "HOME PAGE!"
+
 
 @app.route('/email', methods=['POST'])
 def email_notification():
@@ -41,21 +42,22 @@ def email_notification():
         returns "success"
     """
     if request.method == "POST":
-        if request.headers['X-Github-Event']=='push':
-            #parse the json
-            info=json.dumps(request.json)
+        if request.headers['X-Github-Event'] == 'push':
+            # parse the json
+            info = json.dumps(request.json)
             data = json.loads(info)
             commits = data["commits"][0]
             author_info = commits["author"]
             name = author_info["name"]
             email = author_info["email"]
-            #craft the email message"
+            # craft the email message"
             msg = Message("Hello {}, I am an email!".format(name), sender="jacobmimms@gmail.com",
-                        recipients=[email])
+                          recipients=[email])
             msg.body = "testing"
             msg.html = "<b>testing</>"
             mail.send(msg)
         return "success"
+
 
 @app.route('/github', methods=['POST'])
 def webhook_message():
@@ -70,9 +72,10 @@ def webhook_message():
             email = owner["email"]
             message = "user: {} \nemail: {}".format(name, email)
             print(message)
-            #create a git repo object, from which you can change branches as you please
+            # create a git repo object, from which you can change branches as you please
             gitRepo = gitfunctions.GitRepo(branch)
-            syntaxCheck = build.SyntaxCheck(gitRepo.repoLocalPath + "Assignment2/server.py")
+            syntaxCheck = build.SyntaxCheck(
+                gitRepo.repoLocalPath + "Assignment2/server.py")
             if syntaxCheck.result == True:
                 return "success"
             else:
