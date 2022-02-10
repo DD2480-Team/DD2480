@@ -10,7 +10,7 @@ class GitRepo:
     """
     def __init__(self, branchName) -> None:
         try:
-            self.repo = Repo.clone_from("git@github.com:DD2480-Team/DD2480.git", gitDir, branch=branchName)
+            self.repo = Repo.clone_from("https://github.com/DD2480-Team/DD2480.git", gitDir, branch=branchName)
             print("Cloned repo from remote")
         except Exception as e:
             print("Git testing repo found at:", gitDir)

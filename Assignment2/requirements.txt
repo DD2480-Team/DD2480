@@ -1,0 +1,6 @@
+GitPython
+pytest
+pylint
+flask
+flask-mail
+

@@ -29,7 +29,10 @@ def test_webhook_message(client):
     """
 
     url = "/github"
-    body = {"repository": {"owner": {"name": "DD2480-Team", "email": "NULL"}}}
+    body = {
+        "ref": "master",
+        "repository": {"owner": {"name": "DD2480-Team", "email": "NULL"}},
+    }
     header = {"X-Github-Event": "push"}
 
     rv = client.post(url, json=body, headers=header)

@@ -4,11 +4,12 @@ import build
 from flask_mail import Message, Mail
 import json
 import gitfunctions
-import os
 import build
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from flask_cors import CORS, cross_origin
+from flask_cors import cross_origin
+import test
+import os
 
 app = Flask(__name__)
 db = SQLAlchemy(app)
@@ -37,6 +38,7 @@ app.config["MAIL_USE_SSL"] = True
 mail = Mail(app)
 
 defaultBranch = "master"
+allowTests = False
 
 
 @app.route("/")
@@ -63,9 +65,10 @@ def email_notification():
             author_info = commits["author"]
             name = author_info["name"]
             email = author_info["email"]
+            # craft the email message"
             msg = Message(
                 "Hello {}, I am an email!".format(name),
-                sender="jacobmimms@gmail.com",
+                sender=os.environ.get("USER2480"),
                 recipients=[email],
             )
             msg.body = "testing"
@@ -97,6 +100,10 @@ def webhook_message():
             syntaxCheck = build.SyntaxCheck(
                 gitRepo.repoLocalPath + "Assignment2/server.py"
             )
+            if allowTests:
+                testing = test.Test(
+                    gitRepo.repoLocalPath + "Assignment2/test_server.py"
+                )
             update_build_with_syntax_check(newBuild, syntaxCheck.result)
             data = {"build_result": syntaxCheck.result, "error": ""}
             return make_response(jsonify(data), 201)
