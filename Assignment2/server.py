@@ -8,9 +8,9 @@ import os
 import build
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///C:\\sqlite\\test.db"
 db = SQLAlchemy(app)
 
 from utils import *
@@ -18,14 +18,18 @@ from model import Build
 
 db.create_all()
 
-app.config["MAIL_SERVER"] = "smtp.gmail.com"
-app.config["MAIL_PORT"] = 465
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///C:\\sqlite\\test.db"
+app.config["CORS_HEADERS"] = "Content-Type"
+
+
 """
 uses os.environ.get to access secret variables stored in env/bin/activate
 under the deactivate function in env/bin/activate include the lines:
 export USER2480="the_email"
 export PASS2480="the_password"
 """
+app.config["MAIL_SERVER"] = "smtp.gmail.com"
+app.config["MAIL_PORT"] = 465
 app.config["MAIL_USERNAME"] = os.environ.get("USER2480")
 app.config["MAIL_PASSWORD"] = os.environ.get("PASS2480")
 app.config["MAIL_USE_TLS"] = False
@@ -99,6 +103,7 @@ def webhook_message():
 
 
 @app.route("/history", methods=["GET"])
+@cross_origin()
 def get_history():
     try:
         builds = get_all_builds()
