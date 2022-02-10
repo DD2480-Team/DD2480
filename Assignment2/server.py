@@ -38,7 +38,7 @@ app.config["MAIL_USE_SSL"] = True
 mail = Mail(app)
 
 defaultBranch = "master"
-allowTests = False
+allowTests = True
 
 
 @app.route("/")

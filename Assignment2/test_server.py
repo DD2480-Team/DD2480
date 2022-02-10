@@ -1,5 +1,6 @@
 import pytest
 from server import webhook_message, app
+import json
 
 
 @pytest.fixture
@@ -29,12 +30,10 @@ def test_webhook_message(client):
     """
 
     url = "/github"
-    body = {
-        "ref": "master",
-        "repository": {"owner": {"name": "DD2480-Team", "email": "NULL"}},
-    }
+    with open("test_success_body.json") as f:
+        data = json.load(f)
     header = {"X-Github-Event": "push"}
 
-    rv = client.post(url, json=body, headers=header)
+    rv = client.post(url, json=data, headers=header)
     result = rv.data
-    assert result.decode() == "success"
+    assert result.decode() == {"build_result": True, "error": ""}
