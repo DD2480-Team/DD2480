@@ -1,9 +1,7 @@
-from flask import Flask, request
-from __future__ import print_function
+from shutil import ExecError
+from flask import Flask, make_response, request, jsonify
 import build
-from flask import Flask, request
 from flask_mail import Message, Mail
-from git import Repo
 import json
 import gitfunctions
 import os
@@ -15,11 +13,11 @@ app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///C:\\sqlite\\test.db"
 db = SQLAlchemy(app)
 
+from utils import *
 from model import Build
 
 db.create_all()
-app = Flask(__name__)
-# configuration for the mail client
+
 app.config["MAIL_SERVER"] = "smtp.gmail.com"
 app.config["MAIL_PORT"] = 465
 """
@@ -61,7 +59,6 @@ def email_notification():
             author_info = commits["author"]
             name = author_info["name"]
             email = author_info["email"]
-            # craft the email message"
             msg = Message(
                 "Hello {}, I am an email!".format(name),
                 sender="jacobmimms@gmail.com",
@@ -75,28 +72,29 @@ def email_notification():
 
 @app.route("/github", methods=["POST"])
 def webhook_message():
-    if request.method == "POST":
-        if request.headers["X-Github-Event"] == "push":
-            info = json.dumps(request.json)
-            data = json.loads(info)
-            branch = data["ref"].split("/")[-1]
-            respository = data["repository"]
-            owner = respository["owner"]
-            name = owner["name"]
-            email = owner["email"]
-            message = "user: {} \nemail: {}".format(name, email)
-            print(message)
-            # create a git repo object, from which you can change branches as you please
-            gitRepo = gitfunctions.GitRepo(branch)
-            syntaxCheck = build.SyntaxCheck(
-                gitRepo.repoLocalPath + "Assignment2/server.py"
-            )
-            if syntaxCheck.result == True:
-                return "success"
-            else:
-                return "failure"
-        else:
-            return "Not a push event."
+    if request.headers["X-Github-Event"] == "push":
+        info = json.dumps(request.json)
+        data = json.loads(info)
+        newBuild = save_json_to_build(data)
+        gitRepo = gitfunctions.GitRepo(newBuild.branch)
+        syntaxCheck = build.SyntaxCheck(gitRepo.repoLocalPath + "Assignment2/server.py")
+        update_build_with_syntax_check(newBuild, syntaxCheck.result)
+        data = {"build_result": syntaxCheck.result, "error": ""}
+        return make_response(jsonify(data), 201)
+    else:
+        data = {"build_result": "", "error": "Invalid request type"}
+        return make_response(jsonify(data), 400)
+
+
+@app.route("/history", methods=["GET"])
+def get_history():
+    try:
+        builds = get_all_builds()
+        data = {"builds": builds, "error": ""}
+        return make_response(jsonify(data), 200)
+    except:
+        data = {"builds": [], "error": "Internal server error"}
+        return make_response(jsonify(data), 500)
 
 
 if __name__ == "__main__":

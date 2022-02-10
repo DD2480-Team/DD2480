@@ -1,12 +1,24 @@
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
+from time import time
 from server import db
+from dataclasses import dataclass
 
 
+@dataclass
 class Build(db.Model):
+    id: int
+    repo_name: str
+    owner: str
+    pusher: str
+    branch: str
+    repo_name: str
+    timestamp: int
+    syntax_result: bool
+
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(80), unique=True, nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
-    message = db.Column(db.String(256), unique=True, nullable=False)
-    repository = db.Column(db.String(256), unique=True, nullable=False)
-    owner = db.Column(db.String(256), unique=True, nullable=False)
+    repo_name = db.Column(db.String(256), nullable=False)
+    owner = db.Column(db.String(256), nullable=False)
+    pusher = db.Column(db.String(256), nullable=False)
+    branch = db.Column(db.String(256), nullable=False)
+    repo_url = db.Column(db.String(256), nullable=False)
+    timestamp = db.Column(db.Integer())
+    syntax_result = db.Column(db.Boolean)
