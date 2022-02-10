@@ -28,7 +28,9 @@ def test_webhook_message(client):
     """
 
     url = "/github" 
-    body= {"repository": {
+    body= {
+        "ref": "master",
+        "repository": {
             "owner": {
                 "name": "DD2480-Team",
                 "email": "NULL"

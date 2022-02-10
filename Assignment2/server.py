@@ -33,10 +33,7 @@ def webhook_message():
             syntaxCheck = build.SyntaxCheck(gitRepo.repoLocalPath + "Assignment2/server.py")
             if syntaxCheck.result == False:
                 return "failure"
-
-            # not sure if this is a valid method
-            #print(str(pathlib.Path(__file__).parent.resolve()))
-            #if gitRepo.repoLocalPath[2:] not in str(pathlib.Path(__file__).parent.resolve()):
+            
             testing = test.Test(gitRepo.repoLocalPath + "Assignment2/test_server.py")
             if testing.result == False:
                 return "failure"
