@@ -54,7 +54,7 @@ def email_notification():
             name = author_info["name"]
             email = author_info["email"]
             # craft the email message"
-            msg = Message("Hello {}, I am an email!".format(name), sender="jacobmimms@gmail.com",
+            msg = Message("Hello {}, I am an email!".format(name), sender=os.environ.get("USER2480"),
                           recipients=[email])
             msg.body = "testing"
             msg.html = "<b>testing</>"
