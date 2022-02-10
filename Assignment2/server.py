@@ -7,7 +7,7 @@ import gitfunctions
 app = Flask(__name__)
 
 defaultBranch = "master"
-
+import build
 
 @app.route('/')
 def home_page():
@@ -20,16 +20,16 @@ def webhook_message():
         if request.headers['X-Github-Event'] == 'push':
             info = json.dumps(request.json)
             data = json.loads(info)
+            branch = data["ref"].split('/')[-1]
             respository = data["repository"]
             owner = respository["owner"]
             name = owner["name"]
             email = owner["email"]
             message = "user: {} \nemail: {}".format(name, email)
             print(message)
-            # create a git repo object, from which you can change branches as you please
-            gitRepo = gitfunctions.GitRepo(defaultBranch)
-            syntaxCheck = build.SyntaxCheck(
-                gitRepo.repoLocalPath + "Assignment2/server.py")
+            #create a git repo object, from which you can change branches as you please
+            gitRepo = gitfunctions.GitRepo(branch)
+            syntaxCheck = build.SyntaxCheck(gitRepo.repoLocalPath + "Assignment2/server.py")
             if syntaxCheck.result == True:
                 return "success"
             else:
