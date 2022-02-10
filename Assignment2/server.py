@@ -72,17 +72,29 @@ def email_notification():
 
 @app.route("/github", methods=["POST"])
 def webhook_message():
-    if request.headers["X-Github-Event"] == "push":
-        info = json.dumps(request.json)
-        data = json.loads(info)
-        newBuild = save_json_to_build(data)
-        gitRepo = gitfunctions.GitRepo(newBuild.branch)
-        syntaxCheck = build.SyntaxCheck(gitRepo.repoLocalPath + "Assignment2/server.py")
-        update_build_with_syntax_check(newBuild, syntaxCheck.result)
-        data = {"build_result": syntaxCheck.result, "error": ""}
-        return make_response(jsonify(data), 201)
+    if (
+        "X-Github-Event" in request.headers
+        and request.headers["X-Github-Event"] == "push"
+    ):
+        try:
+            info = json.dumps(request.json)
+            data = json.loads(info)
+            newBuild = save_json_to_build(data)
+            gitRepo = gitfunctions.GitRepo(newBuild.branch)
+            syntaxCheck = build.SyntaxCheck(
+                gitRepo.repoLocalPath + "Assignment2/server.py"
+            )
+            update_build_with_syntax_check(newBuild, syntaxCheck.result)
+            data = {"build_result": syntaxCheck.result, "error": ""}
+            return make_response(jsonify(data), 201)
+        except:
+            data = {"build_result": "", "error": "The JSON body is incorrect"}
+            return make_response(jsonify(data), 400)
     else:
-        data = {"build_result": "", "error": "Invalid request type"}
+        data = {
+            "build_result": "",
+            "error": "Ensure the X-Github-Event header is set correctly",
+        }
         return make_response(jsonify(data), 400)
 
 
