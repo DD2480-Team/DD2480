@@ -12,15 +12,17 @@ import test
 import os
 
 app = Flask(__name__)
+
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///C:\\sqlite\\test.db"
+app.config["CORS_HEADERS"] = "Content-Type"
+
 db = SQLAlchemy(app)
+
 
 from utils import *
 from model import Build
 
 db.create_all()
-
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///C:\\sqlite\\test.db"
-app.config["CORS_HEADERS"] = "Content-Type"
 
 
 """
@@ -110,6 +112,11 @@ def webhook_message():
         except:
             data = {"build_result": "", "error": "The JSON body is incorrect"}
             return make_response(jsonify(data), 400)
+    elif (
+        "X-Github-Event" in request.headers
+        and request.headers["X-Github-Event"] == "ping"
+    ):
+        return make_response(jsonify({}), 200)
     else:
         data = {
             "build_result": "",

@@ -26,7 +26,7 @@ def test_webhook_message(client):
     Args:
         client (defined above): an interface to a specfically configured app instance
 
-    Test result: Pass if webhook_message returns "success", else Fail
+    Test result: Pass if status code being returned is 201
     """
 
     url = "/github"
@@ -35,5 +35,4 @@ def test_webhook_message(client):
     header = {"X-Github-Event": "push"}
 
     rv = client.post(url, json=data, headers=header)
-    result = rv.data
-    assert result.decode() == {"build_result": True, "error": ""}
+    assert rv.status_code == 201
