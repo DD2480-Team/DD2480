@@ -1,12 +1,12 @@
 from __future__ import print_function
+import build
 from flask import Flask, request
 from flask_mail import Message, Mail
 from git import Repo
 import json
-import gitfunctions
+import gitfunctions=
 import os
 import build
-
 app = Flask(__name__)
 #configuration for the mail client
 app.config['MAIL_SERVER']='smtp.gmail.com'
@@ -23,7 +23,8 @@ app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 mail = Mail(app)
 
-defaultBranch = "push_for_testing"
+defaultBranch = "master"
+import build
 
 @app.route('/')
 def home_page():
@@ -59,23 +60,27 @@ def email_notification():
 @app.route('/github', methods=['POST'])
 def webhook_message():
     if request.method == "POST":
-        if request.headers['X-Github-Event']=='push':
-            info=json.dumps(request.json)
+        if request.headers['X-Github-Event'] == 'push':
+            info = json.dumps(request.json)
             data = json.loads(info)
+            branch = data["ref"].split('/')[-1]
             respository = data["repository"]
             owner = respository["owner"]
             name = owner["name"]
             email = owner["email"]
-            message = "user: {} \nemail: {}".format(name,email)
+            message = "user: {} \nemail: {}".format(name, email)
             print(message)
             #create a git repo object, from which you can change branches as you please
-            gitRepo = gitfunctions.GitRepo(defaultBranch)
+            gitRepo = gitfunctions.GitRepo(branch)
             syntaxCheck = build.SyntaxCheck(gitRepo.repoLocalPath + "Assignment2/server.py")
             if syntaxCheck.result == True:
                 return "success"
             else:
                 return "failure"
+        else:
+            return "Not a push event."
 
-if __name__=='__main__':
+
+if __name__ == '__main__':
     app.secret_key = 'super secret key'
     app.run(debug=True,  port=4567)
