@@ -27,7 +27,7 @@ app.config['MAIL_USE_SSL'] = True
 mail = Mail(app)
 
 defaultBranch = "master"
-allowTests = True
+allowTests = False
 
 @app.route('/')
 def home_page():
@@ -89,8 +89,8 @@ def webhook_message():
             
             if(allowTests):
                 testing = test.Test(gitRepo.repoLocalPath + "Assignment2/test_server.py")
-                if testing.result == False:
-                    return "failure"
+            if testing.result == False:
+                return "failure"
             else:
                 return "success"
         else:
