@@ -89,8 +89,8 @@ def webhook_message():
             
             if(allowTests):
                 testing = test.Test(gitRepo.repoLocalPath + "Assignment2/test_server.py")
-            if testing.result == False:
-                return "failure"
+                if testing.result == False:
+                    return "failure"
             else:
                 return "success"
         else:
