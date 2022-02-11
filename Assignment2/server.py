@@ -39,7 +39,7 @@ app.config["MAIL_USE_TLS"] = False
 app.config["MAIL_USE_SSL"] = True
 mail = Mail(app)
 
-defaultBranch = "issue-68-listing-past-builds"
+defaultBranch = "master"
 allowTests = False
 
 
@@ -63,16 +63,7 @@ def email_notification():
             # parse the json
             info = json.dumps(request.json)
             data = json.loads(info)
-            commits = data["commits"][0]
-            author_info = commits["author"]
-            name = author_info["name"]
-            email = author_info["email"]
-            # craft the email message"
-            msg = Message(
-                "Hello {}, I am an email!".format(name),
-                sender=os.environ.get("USER2480"),
-                recipients=[email],
-            )
+            msg = create_email_message(data)
             msg.body = "testing"
             msg.html = "<b>testing</>"
             mail.send(msg)
@@ -103,15 +94,16 @@ def webhook_message():
                 gitRepo.repoLocalPath + "Assignment2/server.py"
             )
             if allowTests:
-                testing = test.Test(
-                    gitRepo.repoLocalPath + "Assignment2/test_server.py"
-                )
+                test.Test(gitRepo.repoLocalPath + "Assignment2/test_server.py")
             update_build_with_syntax_check(newBuild, syntaxCheck.result)
-            data = {"build_result": syntaxCheck.result, "error": ""}
-            return make_response(jsonify(data), 201)
-        except:
-            data = {"build_result": "", "error": "The JSON body is incorrect"}
-            return make_response(jsonify(data), 400)
+            res = {"build_result": syntaxCheck.result, "error": ""}
+            msg = create_email_message(data, syntaxCheck.result)
+            mail.send(msg)
+            return make_response(jsonify(res), 201)
+        except Exception as e:
+            print(e)
+            res = {"build_result": "", "error": "The JSON body is incorrect"}
+            return make_response(jsonify(res), 400)
     elif (
         "X-Github-Event" in request.headers
         and request.headers["X-Github-Event"] == "ping"

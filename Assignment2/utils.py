@@ -1,6 +1,8 @@
 from server import db
 from model import Build
 import time
+from flask_mail import Message
+import os
 
 
 def save_json_to_build(data):
@@ -30,6 +32,23 @@ def save_json_to_build(data):
         return new_build
     except:
         raise Exception("JSON data could not be parsed")
+
+
+def create_email_message(data, syntax_result):
+    commits = data["commits"][0]
+    author_info = commits["author"]
+    name = author_info["name"]
+    email = author_info["email"]
+    msg = Message(
+        f"Build result for build by {name}",
+        sender=os.environ.get("USER2480"),
+        recipients=[email],
+    )
+    if syntax_result:
+        msg.body = "The build was successful"
+    else:
+        msg.body = "The build has failed"
+    return msg
 
 
 def update_build_with_syntax_check(build, syntax_result):
