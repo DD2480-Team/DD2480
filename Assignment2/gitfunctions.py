@@ -1,19 +1,19 @@
 from git import Repo
 import shutil
 import os
+from server import tempDir
 # path to where this class will create the directory to pull the project into
-gitDir = "./temp-git-dir/"
 
 class GitRepo:
     """ Creates a repo object and checks out the given branch (remember the branch name is different if you have it locally)
-        This will create it in your local filesystem currently at gitDir = "./temp-git-dir/"
+        This will create it in your local filesystem currently at tempDir = "./temp-git-dir/"
     """
-    def __init__(self, branchName) -> None:
-        if os.path.exists(gitDir):
-            shutil.rmtree(gitDir)
-        self.repo = Repo.clone_from("https://github.com/DD2480-Team/DD2480.git", gitDir, branch=branchName)
+    def __init__(self, directory, branchName) -> None:
+        if os.path.exists(directory):
+            shutil.rmtree(directory)
+        self.repo = Repo.clone_from("https://github.com/DD2480-Team/DD2480.git", directory, branch=branchName)
         print("Cloned repo from remote")
-        self.repoLocalPath = gitDir
+        self.repoLocalPath = directory
         pullinfo = self.gitPull()
         print(pullinfo)
         #self.checkoutBranch("master")          #How to checkout a local branch  
@@ -37,17 +37,17 @@ class GitRepo:
             print("The repo contains stuff!")
             return True
 
-    def forceClone(self, branchName):
+    def forceClone(self, directory, branchName):
         """Force a git clone (for example if you've deleted files, which git won't reset with a pull)
 
         Args:
             branchName (String): name of the branch you want to clone
         """
         try:
-            shutil.rmtree(gitDir)
+            shutil.rmtree(directory)
         except OSError as e:
-            print("Error: %s : %s" % (gitDir, e.strerror))
-        self.repo = Repo.clone_from("https://github.com/DD2480-Team/DD2480.git", gitDir, branch=branchName)
+            print("Error: %s : %s" % (directory, e.strerror))
+        self.repo = Repo.clone_from("https://github.com/DD2480-Team/DD2480.git", directory, branch=branchName)
         print("Cloned repo from remote")
 
     def gitPull(self):
@@ -82,5 +82,5 @@ class GitRepo:
             print(str(e))
 
 if __name__=='__main__':
-    gitrepo = GitRepo("master")
+    gitrepo = GitRepo(tempDir, "master")
 

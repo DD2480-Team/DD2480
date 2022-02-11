@@ -40,7 +40,8 @@ app.config["MAIL_USE_TLS"] = False
 app.config["MAIL_USE_SSL"] = True
 mail = Mail(app)
 
-defaultBranch = "master"
+tempDir = "./temp-git-dir/"
+currentBranch = "master"
 allowTests = True
 
 
@@ -99,13 +100,14 @@ def webhook_message():
             info = json.dumps(request.json)
             data = json.loads(info)
             newBuild = save_json_to_build(data)
-            gitRepo = gitfunctions.GitRepo(newBuild.branch)
+            currentBranch = newBuild.branch
+            gitRepo = gitfunctions.GitRepo(tempDir, currentBranch)
             syntaxCheck = build.SyntaxCheck(
-                gitRepo.repoLocalPath + "Assignment2/server.py"
+                tempDir + "Assignment2/server.py"
             )
             if allowTests:
                 testing = test.Test(
-                    gitRepo.repoLocalPath + "Assignment2/test_server.py"
+                    tempDir + "Assignment2/test_server.py"
                 )
             update_build_with_syntax_check(newBuild, syntaxCheck.result)
             data = {"build_result": syntaxCheck.result, "error": ""}

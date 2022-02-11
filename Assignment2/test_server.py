@@ -1,10 +1,11 @@
 import pytest
-from server import webhook_message, app
+from server import webhook_message, app, currentBranch, tempDir
 from gitfunctions import GitRepo
 import json
 import os
 
-testBranch = "refactor-git-unit-tests"
+testBranch = "git-unit-tests"
+testDir = "./test-git-dir/"
 
 @pytest.fixture
 def client():
@@ -47,7 +48,8 @@ def test_git_pull_not_empty():
     and then asserts that it is not empty
     """
     repo = GitRepo(testBranch)
-    assert(repo.checkRepoNotBare() ==  True)
+    repo_is_not_bare = repo.checkRepoNotBare()
+    assert(repo_is_not_bare)
 
 def test_git_pull_removed_file():
     """
@@ -55,11 +57,9 @@ def test_git_pull_removed_file():
     then REMOVES the server file and
     checks git status to see git is running and responds correctly
     """
-    repo = GitRepo(testBranch)
-    repo.forceClone(testBranch) #don't allow a local version of repo
+    repo = GitRepo(testDir, testBranch)
+    repo.forceClone(testDir, testBranch) #don't allow a local version of repo
     os.remove(repo.repoLocalPath + "Assignment2/server.py")
     gitStatus = repo.gitStatus()
-
-    repo.forceClone(testBranch) #reset local files just in case someone runs this case in another case
-    
+    repo.forceClone(testDir, testBranch) #reset local files just in case someone runs this case in another case
     assert(gitStatus.find("deleted:    Assignment2/server.py") !=  -1)
