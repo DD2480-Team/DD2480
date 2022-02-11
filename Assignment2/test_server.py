@@ -47,7 +47,7 @@ def test_git_pull_not_empty():
     or if you already have the repo, just a git pull
     and then asserts that it is not empty
     """
-    repo = GitRepo(testBranch)
+    repo = GitRepo(testDir, testBranch)
     repo_is_not_bare = repo.checkRepoNotBare()
     assert(repo_is_not_bare)
 
