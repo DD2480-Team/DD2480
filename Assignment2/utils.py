@@ -17,6 +17,7 @@ def save_json_to_build(data):
         timestamp = int(time.time())
         pusher = data["pusher"]["name"]
         branch = data["ref"].split("/")[-1]
+        print("BRANCH IS:", branch)
         new_build = Build(
             owner=owner,
             timestamp=timestamp,
