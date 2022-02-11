@@ -1,5 +1,6 @@
 from git import Repo
 import shutil
+import os
 # path to where this class will create the directory to pull the project into
 gitDir = "./temp-git-dir/"
 
@@ -8,16 +9,10 @@ class GitRepo:
         This will create it in your local filesystem currently at gitDir = "./temp-git-dir/"
     """
     def __init__(self, branchName) -> None:
-        try:
-            self.repo = Repo.clone_from("https://github.com/DD2480-Team/DD2480.git", gitDir, branch=branchName)
-            print("Cloned repo from remote")
-        except Exception as e:
-            print("Git testing repo found at:", gitDir)
-            if(str(e)[0:40] == "Cmd('git') failed due to: exit code(128)"):
-                #you already have a directory called {gitDir="./temp-git-dir/"} so we'll use that one
-                self.repo = Repo(gitDir)
-            else:
-                raise
+        if os.path.exists(gitDir):
+            shutil.rmtree(gitDir)
+        self.repo = Repo.clone_from("https://github.com/DD2480-Team/DD2480.git", gitDir, branch=branchName)
+        print("Cloned repo from remote")
         self.repoLocalPath = gitDir
         pullinfo = self.gitPull()
         print(pullinfo)

@@ -4,7 +4,7 @@ from gitfunctions import GitRepo
 import json
 import os
 
-testBranch = "push_for_testing"
+testBranch = "refactor-git-unit-tests"
 
 @pytest.fixture
 def client():
@@ -29,16 +29,16 @@ def test_webhook_message(client):
     Args:
         client (defined above): an interface to a specfically configured app instance
 
-    Test result: Pass if status code being returned is 201
+    Test result: Pass if status code being returned is 404, as the endpoint doesn't exists
     """
 
-    url = "/github"
+    url = "/non_existent_endpoint"
     with open("test_success_body.json") as f:
         data = json.load(f)
     header = {"X-Github-Event": "push"}
 
     rv = client.post(url, json=data, headers=header)
-    assert rv.status_code == 201
+    assert rv.status_code == 404
 
 def test_git_pull_not_empty():
     """

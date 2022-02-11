@@ -40,8 +40,8 @@ app.config["MAIL_USE_TLS"] = False
 app.config["MAIL_USE_SSL"] = True
 mail = Mail(app)
 
-defaultBranch = "issue-68-listing-past-builds"
-allowTests = False
+defaultBranch = "master"
+allowTests = True
 
 
 @app.route("/")
@@ -140,4 +140,4 @@ def get_history():
 
 if __name__ == "__main__":
     app.secret_key = "super secret key"
-    app.run(debug=True, port=4567)
+    app.run(debug=False, port=4567)
