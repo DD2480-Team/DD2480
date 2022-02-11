@@ -37,6 +37,20 @@ Jacob Mimms:
 <li>Setup Email functionality
 </ul>
 
+## SEMAT team assessment
+<img src="resources/sematpicture.png" width="50%" height="50%">
+
+We believe ourselves to be in state “Collaborating” as we are now functioning as a unit, with open communication and focus on achieving the mission. We have different ambition levels but are working together to help each other out. To reach the next level, we have to align ourselves a bit more to each others’ goals so we can balance the work more effectively. 
+More specifically, we are working on the following three points to reach "Performing":
+<ul>
+<li> The team continuously adapts to the changing context.
+<li> Effective progress is being achieved with minimal avoidable backtracking and
+reworking.
+<li> Wasted work and the potential for wasted work are continuously identified and
+eliminated.
+</ul>
+We expect to get there by experimenting a bit more with group constellations and continuing to build on our communication.
+
 
 ## Installation/ Usage
   
