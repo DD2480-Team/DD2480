@@ -25,7 +25,7 @@ def save_json_to_build(data):
             pusher=pusher,
             branch=branch,
             repo_name=repo_name,
-            repo_url=url,
+            repo_url=url
         )
         db.session.add(new_build)
         db.session.commit()
@@ -34,7 +34,7 @@ def save_json_to_build(data):
         raise Exception("JSON data could not be parsed")
 
 
-def create_email_message(data, syntax_result):
+def create_email_message(data, syntax_result, test_result):
     commits = data["commits"][0]
     author_info = commits["author"]
     name = author_info["name"]
@@ -44,10 +44,9 @@ def create_email_message(data, syntax_result):
         sender=os.environ.get("USER2480"),
         recipients=[email],
     )
-    if syntax_result:
-        msg.body = "The build was successful"
-    else:
-        msg.body = "The build has failed"
+    msg.body = "The build was %s, and the testing suite %s" \
+            % ("successful" if syntax_result else "unsuccessful", \
+                "passed all tests" if test_result else "failed")
     return msg
 
 
@@ -62,6 +61,17 @@ def update_build_with_syntax_check(build, syntax_result):
     record_found.syntax_result = syntax_result
     db.session.commit()
 
+def update_build_with_test_result(build, test_result):
+    """
+    Takes in a previous build saved to the database and edits the
+    the "test result" to indicate whether a build was successful or not
+    """
+    record_found = Build.query.filter_by(
+        pusher=build.pusher, timestamp=build.timestamp
+    ).first()
+    record_found.test_result = test_result
+    print(record_found.test_result)
+    db.session.commit()
 
 def get_all_builds():
     "Queries all builds in the database"

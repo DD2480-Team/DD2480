@@ -8,15 +8,14 @@ import build
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import cross_origin
-import test
+from test import Test
 import os
 
 app = Flask(__name__)
-
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///C:\\sqlite\\test.db"
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:////Users/jacob/test.db"
 app.config["CORS_HEADERS"] = "Content-Type"
 
-db = SQLAlchemy(app)
+db = SQLAlchemy(app, session_options={"expire_on_commit":False})
 
 
 from utils import *
@@ -40,7 +39,7 @@ app.config["MAIL_USE_SSL"] = True
 mail = Mail(app)
 
 defaultBranch = "master"
-allowTests = False
+allowTests = True
 
 
 @app.route("/")
@@ -48,26 +47,26 @@ def home_page():
     return "HOME PAGE!"
 
 
-@app.route("/email", methods=["POST"])
-def email_notification():
-    """
-    basic email notification to whoever is the author listed in the push event.
-    The msg object can be used to format the contents of an email
+# @app.route("/email", methods=["POST"])
+# def email_notification():
+#     """
+#     basic email notification to whoever is the author listed in the push event.
+#     The msg object can be used to format the contents of an email
 
-    Returns:
-        sends an email to whoever was the author listed in the push event
-        returns "success"
-    """
-    if request.method == "POST":
-        if request.headers["X-Github-Event"] == "push":
-            # parse the json
-            info = json.dumps(request.json)
-            data = json.loads(info)
-            msg = create_email_message(data)
-            msg.body = "testing"
-            msg.html = "<b>testing</>"
-            mail.send(msg)
-        return "success"
+#     Returns:
+#         sends an email to whoever was the author listed in the push event
+#         returns "success"
+#     """
+#     if request.method == "POST":
+#         if request.headers["X-Github-Event"] == "push":
+#             # parse the json
+#             info = json.dumps(request.json)
+#             data = json.loads(info)
+#             msg = create_email_message(data)
+#             msg.body = "testing"
+#             msg.html = "<b>testing</>"
+#             mail.send(msg)
+#         return "success"
 
 
 @app.route("/github", methods=["POST"])
@@ -93,13 +92,19 @@ def webhook_message():
             syntaxCheck = build.SyntaxCheck(
                 gitRepo.repoLocalPath + "Assignment2/server.py"
             )
-            if allowTests:
-                test.Test(gitRepo.repoLocalPath + "Assignment2/test_server.py")
             update_build_with_syntax_check(newBuild, syntaxCheck.result)
-            res = {"build_result": syntaxCheck.result, "error": ""}
-            msg = create_email_message(data, syntaxCheck.result)
-            mail.send(msg)
-            return make_response(jsonify(res), 201)
+            if allowTests:
+                testing = Test(gitRepo.repoLocalPath + "Assignment2/tests")
+                update_build_with_test_result(newBuild, testing.result)
+                msg = create_email_message(data, syntaxCheck.result, testing.result)
+                mail.send(msg)
+                res = {"build_result": syntaxCheck.result, "test_result": testing.result, "error": ""}
+                return make_response(jsonify(res), 201)
+            else:
+                msg = create_email_message(data, syntaxCheck.result, False)
+                res = {"build_result": syntaxCheck.result, "error": ""}
+                mail.send(msg)
+                return make_response(jsonify(res), 201)
         except Exception as e:
             print(e)
             res = {"build_result": "", "error": "The JSON body is incorrect"}
