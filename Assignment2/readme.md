@@ -64,3 +64,18 @@ copy the url of the form http://x-x-x-x-x.ngrok.io and navigate to the webhooks 
   
 Once the webhook is added and the server is running, push events on github will trigger the CI suite! 
 
+# Syntax Check
+## Implementation
+1. The remote branch where the change has been made is cloned when our server is triggered by webhook
+2. The syntax check is conducted on the branch with pylint
+## Unit Test
+1. Push the code with syntax error to a specific remote branch, and our server should report "Syntax Error!!"
+2. Push a code without syntax error to a specific remote branch, and our server should report "Ready for testing!!"
+
+# Automated Tests
+## Implementation
+1. The remote branch where the change has been made is cloned when our server is triggered by webhook
+2. The test is conducted on the branch with pytest
+## Unit Test
+1. Push the code with test that shoud fail to a specific remote branch, and our server should report "Some tests are failed." after testing
+2. Push the code with test that shoud success to a specific remote branch, and our server should report "All testcases are passed!!" after testing
