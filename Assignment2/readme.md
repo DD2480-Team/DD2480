@@ -6,6 +6,38 @@ This is a CI Server for Python projects written by group 28 for the Software Eng
 <li>automated tests: the CI server performs automated testing</li>
 <li>notification: the CI server notifies the user of the CI results through email and on a webpage</li>
 
+  
+
+### Contributions
+
+
+Yen Chen: 
+<ul>
+	<li>Syntax checking
+	<li>Testing suite
+</ul>
+Joel Lützow:
+<ul>
+	<li>Git management
+	<li>Testing Integration
+</ul>
+Aïssata Maiga:
+<ul>
+	<li>Proof of concept
+	<li>Debugging control flow
+</ul>
+Gautam Mukesh Manek:
+<ul>
+	<li>Created frontend
+	<li>Integrated backend
+</ul>
+Jacob Mimms:
+<ul>
+<li>Created test skeleton
+<li>Setup Email functionality
+</ul>
+
+
 ## Installation/ Usage
   
 ### Setting up the virtual environment
@@ -60,7 +92,22 @@ ngrok http 4567
 
 copy the url of the form http://x-x-x-x-x.ngrok.io and navigate to the webhooks interface of the repo you wish to work with. Add the url as the Payload URL with '/github', and select the following options:
 
-<img src="github_webhook.png" width="50%" height="50%">
+<img src="resources/github_webhook.png" width="50%" height="50%">
   
 Once the webhook is added and the server is running, push events on github will trigger the CI suite!!
 
+# Syntax Check
+## Implementation
+1. The remote branch where the change has been made is cloned when our server is triggered by webhook
+2. The syntax check is conducted on the branch with pylint
+## Unit Test
+1. Push the code with syntax error to a specific remote branch, and our server should report "Syntax Error!!"
+2. Push a code without syntax error to a specific remote branch, and our server should report "Ready for testing!!"
+
+# Automated Tests
+## Implementation
+1. The remote branch where the change has been made is cloned when our server is triggered by webhook
+2. The test is conducted on the branch with pytest
+## Unit Test
+1. Push the code with test that shoud fail to a specific remote branch, and our server should report "Some tests are failed." after testing
+2. Push the code with test that shoud success to a specific remote branch, and our server should report "All testcases are passed!!" after testing
