@@ -111,15 +111,3 @@ Once the webhook is added and the server is running, push events on github will 
 ## Unit Test
 1. Push the code with test that shoud fail to a specific remote branch, and our server should report "Some tests are failed." after testing
 2. Push the code with test that shoud success to a specific remote branch, and our server should report "All testcases are passed!!" after testing
-
-# Browsable documentation
-
-## Python
-
-Run:
-
-```
-python -m pydoc -p 1234 
-```
-
-The browsable documentation is visible on `localhost:1234`.
