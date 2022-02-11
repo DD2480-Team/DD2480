@@ -1,8 +1,10 @@
+from model import Build
+from utils import *
 from shutil import ExecError
 from flask import Flask, make_response, request, jsonify
 import build
 from flask_mail import Message, Mail
-import json
+import json =
 import gitfunctions
 import build
 from flask import Flask
@@ -18,9 +20,6 @@ app.config["CORS_HEADERS"] = "Content-Type"
 
 db = SQLAlchemy(app)
 
-
-from utils import *
-from model import Build
 
 db.create_all()
 
