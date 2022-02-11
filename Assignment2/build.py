@@ -5,21 +5,21 @@ from pylint import epylint as lint
 
 
 class SyntaxCheck:
-    '''
+    """
     Create an object to conduct syntax check on python program
-    '''
+    """
+
     def __init__(self, path):
         self.path = path
         self.result = self.check()
 
-    
     def check(self):
-        '''
-        Conduct syntax check. 
-        
+        """
+        Conduct syntax check.
+
         Returns:
         [Bool]: True if syntax check passed, False if error occurs or syntax check failed
-        '''
+        """
         print("Syntax checking...")
 
         if path.exists(self.path) == False:
@@ -27,7 +27,9 @@ class SyntaxCheck:
             return False
 
         try:
-            (pylint_stdout, pylint_stderr) = lint.py_run(self.path +' --errors-only', return_std=True)
+            (pylint_stdout, pylint_stderr) = lint.py_run(
+                self.path + " --errors-only", return_std=True
+            )
         except:
             print("Check failed.")
             return False
@@ -44,5 +46,6 @@ class SyntaxCheck:
             print("Ready for testing!!")
             return True
 
-if __name__=='__main__':
+
+if __name__ == "__main__":
     syntaxCheck = SyntaxCheck("./server.py")
