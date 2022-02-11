@@ -3,4 +3,6 @@ pytest
 pylint
 flask
 flask-mail
+flask_sqlalchemy 
+flask_cors
 
