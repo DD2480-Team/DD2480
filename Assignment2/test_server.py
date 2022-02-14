@@ -43,11 +43,15 @@ def test_webhook_message(client):
 
 def test_syntax_check(client):
     """
-    
+    Test the syntax checking function of the cloned repo triggered by webhook.
+    A repo cloned from master according to test_success_body.json will appear
+    under temp-git-dir/Assignment2 and being syntax checked by the server.py in the
+    cloned repo triggered by webhook. 
+
     Args:
         client (defined above): an interface to a specfically configured app instance
 
-    Test result: 
+    Test result: Pass if syntax checking is done correctly. 
     """
     os.chdir("./temp-git-dir/Assignment2")
     url = "/github"
