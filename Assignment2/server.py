@@ -14,6 +14,7 @@ import os
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:////Users/jacob/test.db"
 app.config["CORS_HEADERS"] = "Content-Type"
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app, session_options={"expire_on_commit":False})
 
@@ -38,36 +39,9 @@ app.config["MAIL_USE_TLS"] = False
 app.config["MAIL_USE_SSL"] = True
 mail = Mail(app)
 
-defaultBranch = "master"
+tempDir = "./temp-git-dir/"
+currentBranch = "master"
 allowTests = True
-
-
-@app.route("/")
-def home_page():
-    return "HOME PAGE!"
-
-
-# @app.route("/email", methods=["POST"])
-# def email_notification():
-#     """
-#     basic email notification to whoever is the author listed in the push event.
-#     The msg object can be used to format the contents of an email
-
-#     Returns:
-#         sends an email to whoever was the author listed in the push event
-#         returns "success"
-#     """
-#     if request.method == "POST":
-#         if request.headers["X-Github-Event"] == "push":
-#             # parse the json
-#             info = json.dumps(request.json)
-#             data = json.loads(info)
-#             msg = create_email_message(data)
-#             msg.body = "testing"
-#             msg.html = "<b>testing</>"
-#             mail.send(msg)
-#         return "success"
-
 
 @app.route("/github", methods=["POST"])
 def webhook_message():
@@ -88,12 +62,14 @@ def webhook_message():
             info = json.dumps(request.json)
             data = json.loads(info)
             newBuild = save_json_to_build(data)
-            gitRepo = gitfunctions.GitRepo(newBuild.branch)
+            currentBranch = newBuild.branch
+            gitRepo = gitfunctions.GitRepo(tempDir, currentBranch)
             syntaxCheck = build.SyntaxCheck(
-                gitRepo.repoLocalPath + "Assignment2/server.py"
+                tempDir + "Assignment2/server.py"
             )
             update_build_with_syntax_check(newBuild, syntaxCheck.result)
             if allowTests:
+                print(gitRepo.repoLocalPath + "Assignment2/tests")
                 testing = Test(gitRepo.repoLocalPath + "Assignment2/tests")
                 update_build_with_test_result(newBuild, testing.result)
                 msg = create_email_message(data, syntaxCheck.result, testing.result)
@@ -136,4 +112,4 @@ def get_history():
 
 if __name__ == "__main__":
     app.secret_key = "super secret key"
-    app.run(debug=True, port=4567)
+    app.run(debug=False, port=4567)
