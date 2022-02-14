@@ -49,7 +49,7 @@ def test_syntax_check(client):
 
     Test result: 
     """
-    os.chdir("./temp-git-dir/")
+    os.chdir("./temp-git-dir/Assignment2")
     url = "/github"
     with open("test_success_body.json") as f:
         data = json.load(f)
