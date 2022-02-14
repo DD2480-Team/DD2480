@@ -56,7 +56,7 @@ def test_syntax_check(client):
     header = {"X-Github-Event": "push"}
     rv = client.post(url, json=data, headers=header)
     
-    os.chdir("..")
+    os.chdir("../..")
     assert rv.status_code == 201
 
 def test_git_pull_not_empty():
