@@ -4,7 +4,7 @@ from gitfunctions import GitRepo
 import json
 import os
 
-testBranch = "git-unit-tests"
+testBranch = "master"
 testDir = "./test-git-dir/"
 
 @pytest.fixture
