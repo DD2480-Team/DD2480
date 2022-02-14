@@ -15,6 +15,7 @@ app = Flask(__name__)
 
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///C:\\sqlite\\test.db"
 app.config["CORS_HEADERS"] = "Content-Type"
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
 
@@ -39,7 +40,8 @@ app.config["MAIL_USE_TLS"] = False
 app.config["MAIL_USE_SSL"] = True
 mail = Mail(app)
 
-defaultBranch = "issue-68-listing-past-builds"
+tempDir = "./temp-git-dir/"
+currentBranch = "master"
 allowTests = False
 
 
@@ -98,13 +100,14 @@ def webhook_message():
             info = json.dumps(request.json)
             data = json.loads(info)
             newBuild = save_json_to_build(data)
-            gitRepo = gitfunctions.GitRepo(newBuild.branch)
+            currentBranch = newBuild.branch
+            gitRepo = gitfunctions.GitRepo(tempDir, currentBranch)
             syntaxCheck = build.SyntaxCheck(
-                gitRepo.repoLocalPath + "Assignment2/server.py"
+                tempDir + "Assignment2/server.py"
             )
             if allowTests:
                 testing = test.Test(
-                    gitRepo.repoLocalPath + "Assignment2/test_server.py"
+                    tempDir + "Assignment2/test_server.py"
                 )
             update_build_with_syntax_check(newBuild, syntaxCheck.result)
             data = {"build_result": syntaxCheck.result, "error": ""}
@@ -139,4 +142,4 @@ def get_history():
 
 if __name__ == "__main__":
     app.secret_key = "super secret key"
-    app.run(debug=True, port=4567)
+    app.run(debug=False, port=4567)
