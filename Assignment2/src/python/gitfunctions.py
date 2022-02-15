@@ -16,9 +16,8 @@ class GitRepo:
     def __init__(self, directory, branchName) -> None:
         if os.path.exists(directory):
             if not os.access(directory, os.W_OK):
-                print("here")
                 os.chmod(directory, stat.S_IWUSR)
-                shutil.rmtree(directory, ignore_errors=True)
+            shutil.rmtree(directory, onerror=remove_readonly)
         self.repo = Repo.clone_from(
             "https://github.com/DD2480-Team/DD2480.git", directory, branch=branchName
         )
@@ -94,6 +93,12 @@ class GitRepo:
             print(checkoutStatus)
         except Exception as e:
             print(str(e))
+
+
+def remove_readonly(func, path, _):
+    "Clear the readonly bit and reattempt the removal"
+    os.chmod(path, stat.S_IWRITE)
+    func(path)
 
 
 if __name__ == "__main__":
