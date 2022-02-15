@@ -36,7 +36,7 @@ def test_webhook_message(client):
 
     url = "/non_existent_endpoint"
     print(os.getcwd())
-    with open("test_success_body.json") as f:
+    with open("src/test/test_success_body.json") as f:
         data = json.load(f)
     header = {"X-Github-Event": "push"}
 
@@ -57,7 +57,7 @@ def test_syntax_check(client):
     Test result: Pass if syntax checking is done correctly.
     """
     url = "/github"
-    with open("test_success_body.json") as f:
+    with open("src/test/test_success_body.json") as f:
         data = json.load(f)
     header = {"X-Github-Event": "push"}
     rv = client.post(url, json=data, headers=header)
