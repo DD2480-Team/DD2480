@@ -23,9 +23,11 @@ const Home = () => {
   return (
     <MainPage>
       <SectionMainHeading>Build History</SectionMainHeading>
-      {builds.map((build, idx) => {
+      {builds.map(
+        (build, idx) => {
         return <ListItem build={build} key={build.timestamp} />;
-      })}
+        }).reverse()
+      }
     </MainPage>
   );
 };

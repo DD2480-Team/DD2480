@@ -1,27 +1,22 @@
-from shutil import ExecError
-from flask import Flask, make_response, request, jsonify
-import build
-from flask_mail import Message, Mail
+import os
+from src.python.test import Test
+import src.python.build as build
 import json
-import gitfunctions
-import build
-from flask import Flask
+import src.python.gitfunctions as gitfunctions
+
+from flask import Flask, make_response, request, jsonify
+from flask_mail import Mail
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import cross_origin
-import test
-import os
 
 app = Flask(__name__)
-
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///C:\\sqlite\\test.db"
 app.config["CORS_HEADERS"] = "Content-Type"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-db = SQLAlchemy(app)
+db = SQLAlchemy(app, session_options={"expire_on_commit":False})
 
-
-from utils import *
-from model import Build
+from src.python.utils import *
 
 db.create_all()
 
@@ -43,43 +38,6 @@ mail = Mail(app)
 tempDir = "./temp-git-dir/"
 currentBranch = "master"
 allowTests = False
-
-
-@app.route("/")
-def home_page():
-    return "HOME PAGE!"
-
-
-@app.route("/email", methods=["POST"])
-def email_notification():
-    """
-    basic email notification to whoever is the author listed in the push event.
-    The msg object can be used to format the contents of an email
-
-    Returns:
-        sends an email to whoever was the author listed in the push event
-        returns "success"
-    """
-    if request.method == "POST":
-        if request.headers["X-Github-Event"] == "push":
-            # parse the json
-            info = json.dumps(request.json)
-            data = json.loads(info)
-            commits = data["commits"][0]
-            author_info = commits["author"]
-            name = author_info["name"]
-            email = author_info["email"]
-            # craft the email message"
-            msg = Message(
-                "Hello {}, I am an email!".format(name),
-                sender=os.environ.get("USER2480"),
-                recipients=[email],
-            )
-            msg.body = "testing"
-            msg.html = "<b>testing</>"
-            mail.send(msg)
-        return "success"
-
 
 @app.route("/github", methods=["POST"])
 def webhook_message():
@@ -103,18 +61,24 @@ def webhook_message():
             currentBranch = newBuild.branch
             gitRepo = gitfunctions.GitRepo(tempDir, currentBranch)
             syntaxCheck = build.SyntaxCheck(
-                tempDir + "Assignment2/server.py"
+                tempDir + "Assignment2/src/python/"
             )
-            if allowTests:
-                testing = test.Test(
-                    tempDir + "Assignment2/test_server.py"
-                )
             update_build_with_syntax_check(newBuild, syntaxCheck.result)
-            data = {"build_result": syntaxCheck.result, "error": ""}
-            return make_response(jsonify(data), 201)
-        except:
-            data = {"build_result": "", "error": "The JSON body is incorrect"}
-            return make_response(jsonify(data), 400)
+            if allowTests:
+                testing = Test(tempDir + "Assignment2/src/test")
+                update_build_with_test_result(newBuild, testing.result)
+                msg = create_email_message(data, syntaxCheck.result, testing.result)
+                mail.send(msg)
+                res = {"build_result": syntaxCheck.result, "test_result": testing.result, "error": ""}
+                return make_response(jsonify(res), 201)
+            else:
+                msg = create_email_message(data, syntaxCheck.result, False)
+                res = {"build_result": syntaxCheck.result, "error": ""}
+                mail.send(msg)
+                return make_response(jsonify(res), 201)
+        except Exception as e:
+            res = {"build_result": "", "error": "The JSON body is incorrect"}
+            return make_response(jsonify(res), 400)
     elif (
         "X-Github-Event" in request.headers
         and request.headers["X-Github-Event"] == "ping"
@@ -141,5 +105,9 @@ def get_history():
 
 
 if __name__ == "__main__":
+    app.secret_key = "super secret key"
+    app.run(debug=False, port=4567)
+
+def main():
     app.secret_key = "super secret key"
     app.run(debug=False, port=4567)

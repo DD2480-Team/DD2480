@@ -39,9 +39,6 @@ class Test:
             return False
         
 
-    
-
-
 if __name__ == "__main__":
-    testing = Test("./test_server.py")
+    testing = Test("./tests")
     print(testing.result)

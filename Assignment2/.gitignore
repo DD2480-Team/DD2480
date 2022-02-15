@@ -5,6 +5,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+src/build-fe/node_modules/
 # C extensions
 *.so
 

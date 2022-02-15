@@ -1,6 +1,6 @@
 import pytest
-from server import webhook_message, app, currentBranch, tempDir
-from gitfunctions import GitRepo
+from src.python.server import app, currentBranch, tempDir
+from src.python.gitfunctions import GitRepo
 import json
 import os
 
@@ -34,7 +34,8 @@ def test_webhook_message(client):
     """
 
     url = "/non_existent_endpoint"
-    with open("test_success_body.json") as f:
+    print(os.getcwd())
+    with open("src/test/test_success_body.json") as f:
         data = json.load(f)
     header = {"X-Github-Event": "push"}
 

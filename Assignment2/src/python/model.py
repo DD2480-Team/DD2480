@@ -1,5 +1,5 @@
 from time import time
-from server import db
+from src.python.server import db
 from dataclasses import dataclass
 
 
@@ -13,6 +13,7 @@ class Build(db.Model):
     repo_name: str
     timestamp: int
     syntax_result: bool
+    test_result: bool
 
     id = db.Column(db.Integer, primary_key=True)
     repo_name = db.Column(db.String(256), nullable=False)
@@ -22,3 +23,4 @@ class Build(db.Model):
     repo_url = db.Column(db.String(256), nullable=False)
     timestamp = db.Column(db.Integer())
     syntax_result = db.Column(db.Boolean)
+    test_result = db.Column(db.Boolean)
