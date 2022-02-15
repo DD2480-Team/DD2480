@@ -10,7 +10,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import cross_origin
 
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:////Users/jacob/test.db"
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:////home/ztick/Documents/Funprog/DD2480/Assignment2/test.db" 
 app.config["CORS_HEADERS"] = "Content-Type"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
@@ -61,7 +61,7 @@ def webhook_message():
             currentBranch = newBuild.branch
             gitRepo = gitfunctions.GitRepo(tempDir, currentBranch)
             syntaxCheck = build.SyntaxCheck(
-                tempDir + "Assignment2/src/python/server.py"
+                tempDir + "Assignment2/src/python/"
             )
             update_build_with_syntax_check(newBuild, syntaxCheck.result)
             if allowTests:

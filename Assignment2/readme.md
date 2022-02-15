@@ -5,10 +5,11 @@ This is a CI Server for Python projects written by group 28 for the Software Eng
 <li>syntax check: the CI server performs a syntax check on the Python code</li>
 <li>automated tests: the CI server performs automated testing</li>
 <li>notification: the CI server notifies the user of the CI results through email and on a webpage</li>
+</ol>
 
   
 
-### Contributions
+## Contributions
 
 
 Yen Chen: 
@@ -37,7 +38,7 @@ Jacob Mimms:
 <li>Setup Email functionality
 </ul>
 
-## SEMAT team assessment
+# SEMAT team assessment
 <img src="resources/sematpicture.png" width="50%" height="50%">
 
 We believe ourselves to be in state “Collaborating” as we are now functioning as a unit, with open communication and focus on achieving the mission. We have different ambition levels but are working together to help each other out. To reach the next level, we have to align ourselves a bit more to each others’ goals so we can balance the work more effectively. 
@@ -52,9 +53,9 @@ eliminated.
 We expect to get there by experimenting a bit more with group constellations and continuing to build on our communication.
 
 
-## Installation/ Usage
+# Installation/ Usage
   
-### Setting up the virtual environment
+## Setting up the virtual environment
 
 create a virtual environment in the directory using the command:
 
@@ -90,7 +91,7 @@ python server.py
 ```
 
 
-### Setting up ngrok
+## Setting up ngrok
 
 In a new terminal, install ngrok using:  
 
