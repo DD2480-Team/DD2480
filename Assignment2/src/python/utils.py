@@ -35,6 +35,17 @@ def save_json_to_build(data):
 
 
 def create_email_message(data, syntax_result, test_result):
+    """creates email message by parsing the JSON to get the author's name and email
+    the email contains the results of the syntax test, and testing suite
+
+    Args:
+        data (JSON): JSON from the github webhook
+        syntax_result (boolean): True if syntax passed, else False
+        test_result (boolean): True if test suite passed, else False
+
+    Returns:
+        msg: a message object with the result message that can be sent by the email client
+    """
     commits = data["commits"][0]
     author_info = commits["author"]
     name = author_info["name"]
