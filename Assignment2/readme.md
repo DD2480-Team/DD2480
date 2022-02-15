@@ -87,7 +87,7 @@ pip install -r requirements.txt
 
 Finally, start the server by running 
 ```
-python server.py
+python3 start_server.py
 ```
 
 
