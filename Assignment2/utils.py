@@ -70,7 +70,6 @@ def update_build_with_test_result(build, test_result):
         pusher=build.pusher, timestamp=build.timestamp
     ).first()
     record_found.test_result = test_result
-    print(record_found.test_result)
     db.session.commit()
 
 def get_all_builds():

@@ -41,7 +41,7 @@ mail = Mail(app)
 
 tempDir = "./temp-git-dir/"
 currentBranch = "master"
-allowTests = True
+allowTests = False
 
 @app.route("/github", methods=["POST"])
 def webhook_message():
@@ -69,8 +69,7 @@ def webhook_message():
             )
             update_build_with_syntax_check(newBuild, syntaxCheck.result)
             if allowTests:
-                print(gitRepo.repoLocalPath + "Assignment2/tests")
-                testing = Test(gitRepo.repoLocalPath + "Assignment2/tests")
+                testing = Test(tempDir + "Assignment2/test")
                 update_build_with_test_result(newBuild, testing.result)
                 msg = create_email_message(data, syntaxCheck.result, testing.result)
                 mail.send(msg)
@@ -82,7 +81,6 @@ def webhook_message():
                 mail.send(msg)
                 return make_response(jsonify(res), 201)
         except Exception as e:
-            print(e)
             res = {"build_result": "", "error": "The JSON body is incorrect"}
             return make_response(jsonify(res), 400)
     elif (
