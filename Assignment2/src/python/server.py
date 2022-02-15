@@ -10,7 +10,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import cross_origin
 
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:////home/ztick/Documents/Funprog/DD2480/Assignment2/test.db" 
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///C:\\sqlite\\test.db"
 app.config["CORS_HEADERS"] = "Content-Type"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
