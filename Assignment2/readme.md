@@ -110,6 +110,16 @@ copy the url of the form http://x-x-x-x-x.ngrok.io and navigate to the webhooks 
   
 Once the webhook is added and the server is running, push events on github will trigger the CI suite!!
 
+# Database
+
+For the server and frontend to work, an SQLite3 database needs to run locally. Install SQLite3 `https://www.sqlite.org/download.html` and unzip the folder. Create the database by navigating to the same folder and running the following command from the terminal:
+
+```
+sqlite3 test.db
+```
+
+Navigate to the server and ensure the `SQLALCHEMY_DATABASE_URI` inside `server.py` is set to the path of the sqlite3 database.
+
 # Syntax Check
 
 ## Implementation

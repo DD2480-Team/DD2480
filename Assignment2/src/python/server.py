@@ -14,7 +14,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///C:\\sqlite\\test.db"
 app.config["CORS_HEADERS"] = "Content-Type"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-db = SQLAlchemy(app, session_options={"expire_on_commit":False})
+db = SQLAlchemy(app, session_options={"expire_on_commit": False})
 
 from src.python.utils import *
 
@@ -37,7 +37,8 @@ mail = Mail(app)
 
 tempDir = "./temp-git-dir/"
 currentBranch = "master"
-allowTests = False
+allowTests = True
+
 
 @app.route("/github", methods=["POST"])
 def webhook_message():
@@ -60,16 +61,19 @@ def webhook_message():
             newBuild = save_json_to_build(data)
             currentBranch = newBuild.branch
             gitRepo = gitfunctions.GitRepo(tempDir, currentBranch)
-            syntaxCheck = build.SyntaxCheck(
-                tempDir + "Assignment2/src/python/"
-            )
+            syntaxCheck = build.SyntaxCheck(tempDir + "Assignment2/src/python/")
             update_build_with_syntax_check(newBuild, syntaxCheck.result)
             if allowTests:
                 testing = Test(tempDir + "Assignment2/src/test")
+                print("the result is", testing.result)
                 update_build_with_test_result(newBuild, testing.result)
                 msg = create_email_message(data, syntaxCheck.result, testing.result)
                 mail.send(msg)
-                res = {"build_result": syntaxCheck.result, "test_result": testing.result, "error": ""}
+                res = {
+                    "build_result": syntaxCheck.result,
+                    "test_result": testing.result,
+                    "error": "",
+                }
                 return make_response(jsonify(res), 201)
             else:
                 msg = create_email_message(data, syntaxCheck.result, False)
@@ -107,6 +111,7 @@ def get_history():
 if __name__ == "__main__":
     app.secret_key = "super secret key"
     app.run(debug=False, port=4567)
+
 
 def main():
     app.secret_key = "super secret key"
