@@ -34,7 +34,7 @@ def test_webhook_message(client):
     """
 
     url = "/non_existent_endpoint"
-    print(os.pwd())
+    print(os.getcwd())
     with open("src/test/test_success_body.json") as f:
         data = json.load(f)
     header = {"X-Github-Event": "push"}
