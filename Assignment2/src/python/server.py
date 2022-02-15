@@ -1,9 +1,8 @@
 import os
-from test import Test
-import build
+from src.python.test import Test
+import src.python.build as build
 import json
-import gitfunctions
-
+import src.python.gitfunctions as gitfunctions
 
 from flask import Flask, make_response, request, jsonify
 from flask_mail import Mail
@@ -17,7 +16,7 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app, session_options={"expire_on_commit":False})
 
-from utils import *
+from src.python.utils import *
 
 db.create_all()
 
@@ -38,7 +37,7 @@ mail = Mail(app)
 
 tempDir = "./temp-git-dir/"
 currentBranch = "master"
-allowTests = True
+allowTests = False
 
 @app.route("/github", methods=["POST"])
 def webhook_message():
@@ -106,5 +105,9 @@ def get_history():
 
 
 if __name__ == "__main__":
+    app.secret_key = "super secret key"
+    app.run(debug=False, port=4567)
+
+def main():
     app.secret_key = "super secret key"
     app.run(debug=False, port=4567)

@@ -1,9 +1,9 @@
 from git import Repo
 import shutil
 import os
-from server import tempDir
 # path to where this class will create the directory to pull the project into
 
+tempDir = "./temp-git-dir/"
 class GitRepo:
     """ Creates a repo object and checks out the given branch (remember the branch name is different if you have it locally)
         This will create it in your local filesystem currently at tempDir = "./temp-git-dir/"

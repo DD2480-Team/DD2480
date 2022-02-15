@@ -1,5 +1,5 @@
 from time import time
-from server import db
+from src.python.server import db
 from dataclasses import dataclass
 
 

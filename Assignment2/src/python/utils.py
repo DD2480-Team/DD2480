@@ -1,5 +1,5 @@
-from server import db
-from model import Build
+from src.python.server import db
+from src.python.model import Build
 import time
 from flask_mail import Message
 import os

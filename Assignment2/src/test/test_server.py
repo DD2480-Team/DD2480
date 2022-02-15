@@ -1,6 +1,6 @@
 import pytest
-from server import webhook_message, app, currentBranch, tempDir
-from gitfunctions import GitRepo
+from src.python.server import app, currentBranch, tempDir
+from src.python.gitfunctions import GitRepo
 import json
 import os
 
