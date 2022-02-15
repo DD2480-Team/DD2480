@@ -41,6 +41,28 @@ def test_webhook_message(client):
     rv = client.post(url, json=data, headers=header)
     assert rv.status_code == 404
 
+def test_syntax_check(client):
+    """
+    Test the syntax checking function of the cloned repo triggered by webhook.
+    A repo cloned from master according to test_success_body.json will appear
+    under temp-git-dir/Assignment2 and being syntax checked by the server.py in the
+    cloned repo triggered by webhook. 
+
+    Args:
+        client (defined above): an interface to a specfically configured app instance
+
+    Test result: Pass if syntax checking is done correctly. 
+    """
+    os.chdir("./temp-git-dir/Assignment2")
+    url = "/github"
+    with open("test_success_body.json") as f:
+        data = json.load(f)
+    header = {"X-Github-Event": "push"}
+    rv = client.post(url, json=data, headers=header)
+    
+    os.chdir("../..")
+    assert rv.status_code == 201
+    
 def test_git_pull_not_empty():
     """
     Creates a git object, performs a git clone,
@@ -63,3 +85,4 @@ def test_git_pull_removed_file():
     gitStatus = repo.gitStatus()
     repo.forceClone(testDir, testBranch) #reset local files just in case someone runs this case in another case
     assert(gitStatus.find("deleted:    Assignment2/server.py") !=  -1)
+
