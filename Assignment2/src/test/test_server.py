@@ -56,14 +56,11 @@ def test_syntax_check(client):
 
     Test result: Pass if syntax checking is done correctly.
     """
-    os.chdir("./temp-git-dir/Assignment2")
     url = "/github"
-    with open("./src/test/test_success_body.json") as f:
+    with open("test_success_body.json") as f:
         data = json.load(f)
     header = {"X-Github-Event": "push"}
     rv = client.post(url, json=data, headers=header)
-
-    os.chdir("../..")
     assert rv.status_code == 201
 
 
