@@ -5,10 +5,11 @@ This is a CI Server for Python projects written by group 28 for the Software Eng
 <li>syntax check: the CI server performs a syntax check on the Python code</li>
 <li>automated tests: the CI server performs automated testing</li>
 <li>notification: the CI server notifies the user of the CI results through email and on a webpage</li>
+</ol>
 
   
 
-### Contributions
+## Contributions
 
 
 Yen Chen: 
@@ -37,12 +38,24 @@ Jacob Mimms:
 <li>Setup Email functionality
 </ul>
 
+# SEMAT team assessment
+<img src="resources/sematpicture.png" width="50%" height="50%">
+
+We believe ourselves to be in state “Collaborating” as we are now functioning as a unit, with open communication and focus on achieving the mission. We have different ambition levels but are working together to help each other out. To reach the next level, we have to align ourselves a bit more to each others’ goals so we can balance the work more effectively. 
+More specifically, we are working on the following three points to reach "Performing":
+<ul>
+<li> The team continuously adapts to the changing context.
+<li> Effective progress is being achieved with minimal avoidable backtracking and
+reworking.
+<li> Wasted work and the potential for wasted work are continuously identified and
+eliminated.
+</ul>
+We expect to get there by experimenting a bit more with group constellations and continuing to build on our communication.
 
 
-
-## Installation/ Usage
+# Installation/ Usage
   
-### Setting up the virtual environment
+## Setting up the virtual environment
 
 create a virtual environment in the directory using the command:
 
@@ -78,7 +91,7 @@ python server.py
 ```
 
 
-### Setting up ngrok
+## Setting up ngrok
 
 In a new terminal, install ngrok using:  
 
@@ -113,3 +126,16 @@ Once the webhook is added and the server is running, push events on github will 
 ## Unit Test
 1. Push the code with test that shoud fail to a specific remote branch, and our server should report "Some tests are failed." after testing
 2. Push the code with test that shoud success to a specific remote branch, and our server should report "All testcases are passed!!" after testing
+
+
+# Browsable documentation
+
+## Python
+
+Run:
+
+```
+python -m pydoc -p 1234 
+```
+
+The browsable documentation is visible on `localhost:1234`.

@@ -62,7 +62,7 @@ def test_syntax_check(client):
     
     os.chdir("../..")
     assert rv.status_code == 201
-
+    
 def test_git_pull_not_empty():
     """
     Creates a git object, performs a git clone,
@@ -85,3 +85,4 @@ def test_git_pull_removed_file():
     gitStatus = repo.gitStatus()
     repo.forceClone(testDir, testBranch) #reset local files just in case someone runs this case in another case
     assert(gitStatus.find("deleted:    Assignment2/server.py") !=  -1)
+
