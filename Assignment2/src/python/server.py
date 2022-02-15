@@ -61,11 +61,11 @@ def webhook_message():
             currentBranch = newBuild.branch
             gitRepo = gitfunctions.GitRepo(tempDir, currentBranch)
             syntaxCheck = build.SyntaxCheck(
-                tempDir + "Assignment2/server.py"
+                tempDir + "Assignment2/src/python/server.py"
             )
             update_build_with_syntax_check(newBuild, syntaxCheck.result)
             if allowTests:
-                testing = Test(tempDir + "Assignment2/test")
+                testing = Test(tempDir + "Assignment2/src/test")
                 update_build_with_test_result(newBuild, testing.result)
                 msg = create_email_message(data, syntaxCheck.result, testing.result)
                 mail.send(msg)
