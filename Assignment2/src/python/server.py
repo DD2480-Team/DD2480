@@ -67,8 +67,9 @@ def webhook_message():
                 testing = Test(tempDir + "Assignment2/src/test")
                 if testing.capture:
                     out, err = testing.capture.reset()
+                    print(out, err)
                 else:
-                    out, err = None, None
+                    out, err = "", ""
                 update_build_with_test_result(
                     newBuild, testing.result, out.strip(), err.strip()
                 )
