@@ -37,7 +37,7 @@ mail = Mail(app)
 
 tempDir = "./temp-git-dir/"
 currentBranch = "master"
-allowTests = False
+allowTests = True
 
 
 @app.route("/github", methods=["POST"])

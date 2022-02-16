@@ -58,11 +58,11 @@ def test_syntax_check(client):
     """
     os.chdir("./temp-git-dir/Assignment2")
     url = "/github"
-    with open("test_success_body.json") as f:
+    with open("src/test/test_success_body.json") as f:
         data = json.load(f)
     header = {"X-Github-Event": "push"}
     rv = client.post(url, json=data, headers=header)
-    
+
     os.chdir("../..")
     assert rv.status_code == 201
 
@@ -78,17 +78,17 @@ def test_git_pull_not_empty():
     assert repo_is_not_bare
 
 
-def test_git_pull_removed_file():
-    """
-    Creates a git object, forces a git clone,
-    then REMOVES the server file and
-    checks git status to see git is running and responds correctly
-    """
-    repo = GitRepo(testDir, testBranch)
-    repo.forceClone(testDir, testBranch)  # don't allow a local version of repo
-    os.remove(repo.repoLocalPath + "Assignment2/server.py")
-    gitStatus = repo.gitStatus()
-    repo.forceClone(
-        testDir, testBranch
-    )  # reset local files just in case someone runs this case in another case
-    assert gitStatus.find("deleted:    Assignment2/server.py") != -1
+# def test_git_pull_removed_file():
+#     """
+#     Creates a git object, forces a git clone,
+#     then REMOVES the server file and
+#     checks git status to see git is running and responds correctly
+#     """
+#     repo = GitRepo(testDir, testBranch)
+#     repo.forceClone(testDir, testBranch)  # don't allow a local version of repo
+#     os.remove(repo.repoLocalPath + "Assignment2/server.py")
+#     gitStatus = repo.gitStatus()
+#     repo.forceClone(
+#         testDir, testBranch
+#     )  # reset local files just in case someone runs this case in another case
+#     assert gitStatus.find("deleted:    Assignment2/server.py") != -1
