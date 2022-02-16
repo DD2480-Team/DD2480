@@ -1,3 +1,4 @@
+from unittest import result
 import pytest
 from src.python.server import app, currentBranch, tempDir
 from src.python.gitfunctions import GitRepo
