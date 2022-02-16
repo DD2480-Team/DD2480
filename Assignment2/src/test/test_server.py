@@ -4,7 +4,7 @@ from src.python.gitfunctions import GitRepo
 import json
 import os
 
-testBranch = "trial"
+testBranch = "master"
 testDir = "./test-git-dir/"
 
 
