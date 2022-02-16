@@ -27,14 +27,12 @@ class Test:
         try:
             capture = py.io.StdCapture()
             exit_code = pytest.main([self.path, "--collect-only", "-q"])
-            capture.reset()
         except:
             print("Error occurs during testing.")
-            return False, capture
+            return False, None
 
         if exit_code == 0:
             print("All testcases are passed!!")
-            print("The capture is", capture)
             return True, capture
         elif exit_code == 1:
             print("Some tests are failed.")
