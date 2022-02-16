@@ -65,8 +65,13 @@ def webhook_message():
             update_build_with_syntax_check(newBuild, syntaxCheck.result)
             if allowTests:
                 testing = Test(tempDir + "Assignment2/src/test")
-                print("the result is", testing.result)
-                update_build_with_test_result(newBuild, testing.result)
+                if testing.capture:
+                    out, err = testing.capture.reset()
+                else:
+                    out, err = None, None
+                update_build_with_test_result(
+                    newBuild, testing.result, out.strip(), err.strip()
+                )
                 msg = create_email_message(data, syntaxCheck.result, testing.result)
                 mail.send(msg)
                 res = {
